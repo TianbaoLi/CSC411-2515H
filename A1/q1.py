@@ -18,14 +18,24 @@ def visualize(X, y, features):
     for i in range(feature_count):
         plt.subplot(3, 5, i + 1)
         #TODO: Plot feature i against y
-        plt.scatter([x[i] for x in X], y)
+        plt.scatter([x[i] for x in X], y, s = 1)
         plt.xlabel(features[i])
         plt.ylabel('y')
-
-
+        plt.tight_layout()
     
     plt.tight_layout()
     plt.show()
+
+def split_data(X, y):
+    test_chosen = np.random.choice(len(X), int(len(X) * 0.2))
+    training_set = []
+    test_set = []
+    for i in range(len(X)):
+        if i in test_chosen:
+            test_set.append(X[i])
+        else:
+            training_set.append((X[i]))
+    return training_set, test_set
 
 
 def fit_regression(X,Y):
@@ -42,6 +52,8 @@ def main():
     visualize(X, y, features)
 
     #TODO: Split data into train and test
+    traning_set, test_set = split_data(X, y)
+    print len(traning_set), len(test_set)
 
     # Fit regression model
     w = fit_regression(X, y)
