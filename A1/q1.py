@@ -18,6 +18,11 @@ def visualize(X, y, features):
     for i in range(feature_count):
         plt.subplot(3, 5, i + 1)
         #TODO: Plot feature i against y
+        plt.scatter([x[i] for x in X], y)
+        plt.xlabel(features[i])
+        plt.ylabel('y')
+
+
     
     plt.tight_layout()
     plt.show()
@@ -32,7 +37,7 @@ def main():
     # Load the data
     X, y, features = load_data()
     print("Features: {}".format(features))
-    
+
     # Visualize the features
     visualize(X, y, features)
 
