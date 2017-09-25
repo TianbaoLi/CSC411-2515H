@@ -1,6 +1,8 @@
 from sklearn import datasets
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.linear_model import LinearRegression
+import sklearn
 
 def load_data():
     boston = datasets.load_boston()
@@ -8,6 +10,14 @@ def load_data():
     y = boston.target
     features = boston.feature_names
     return X,y,features
+
+
+def summarize_data(X, y, features):
+    print("Number of data points: {}".format(len(X)))
+    print("Dimensions: {}".format(len(features)))
+    print("Features: {}".format(features))
+    print("Mean house price: {}".format(np.mean(y)))
+    print("Standard deviation of house price: {}".format(np.std(y)))
 
 
 def visualize(X, y, features):
@@ -20,13 +30,13 @@ def visualize(X, y, features):
         #TODO: Plot feature i against y
         plt.scatter([x[i] for x in X], y, s = 1)
         plt.xlabel(features[i])
-        plt.ylabel('y')
+        plt.ylabel('TARGET')
 
     plt.tight_layout()
     plt.show()
 
-def split_data(X, y):
-    test_chosen = np.random.choice(len(X), int(len(X) * 0.2))
+def split_data(X, y, training_ratio = 0.2):
+    test_chosen = np.random.choice(len(X), int(len(X) * training_ratio))
     training_set_x = []
     test_set_x = []
     training_set_y = []
@@ -59,13 +69,26 @@ def test(X, y, w):
     X = np.concatenate((bias.T, X), axis=1)
     f_xw = np.dot(X, np.transpose(w))
     mse = np.mean((y - f_xw) ** 2)
-    return mse
+    mae = np.mean(abs(y - f_xw))
+    r2 = 1 - np.sum((y - f_xw) ** 2) / np.sum((y - np.mean(y)) ** 2)
+    return mse, mae, r2
 
+
+def sklearn_method(training_set_x, test_set_x, training_set_y, test_set_y):
+    lm = LinearRegression()
+    lm.fit(training_set_x, training_set_y)
+    Y_pred = lm.predict(test_set_x)
+    mse = sklearn.metrics.mean_squared_error(test_set_y, Y_pred)
+    mae = sklearn.metrics.mean_absolute_error(test_set_y, Y_pred)
+    r2 = sklearn.metrics.r2_score(test_set_y, Y_pred)
+    return mse, mae, r2
 
 def main():
     # Load the data
     X, y, features = load_data()
-    #print("Features: {}".format(features))
+
+    # Summarize data
+    summarize_data(X, y, features)
 
     # Visualize the features
     visualize(X, y, features)
@@ -74,12 +97,18 @@ def main():
     training_set_x, test_set_x, training_set_y, test_set_y = split_data(X, y)
 
     # Fit regression model
-    w = fit_regression(X, y)
-    print w
+    w = fit_regression(training_set_x, training_set_y)
+    feature_weight = []
+    for i in range(len(features)):
+        feature_weight.append((features[i], w[i]))
+    print("Features vs weight: {}".format(feature_weight))
 
     # Compute fitted values, MSE, etc.
-    MSE = test(X, y, w)
-    print MSE
+    mae, mse, r2 = test(test_set_x, test_set_y, w)
+    print("MSE MAE R2: {}".format((mae, mse, r2)))
+
+    sklearn_mae, sklearn_mse, r2_sklearn = sklearn_method(training_set_x, test_set_x, training_set_y, test_set_y)
+    print("MSE MAE R2 by sklearn linear regression: {}".format((sklearn_mae, sklearn_mse, r2_sklearn)))
 
 if __name__ == "__main__":
     main()
