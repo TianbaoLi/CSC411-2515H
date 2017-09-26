@@ -7,6 +7,7 @@ from __future__ import print_function
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_boston
+import math
 np.random.seed(0)
 
 # load boston housing prices dataset
@@ -76,9 +77,28 @@ def run_k_fold(x,y,taus,k):
            K in the number of folds
     output is losses a vector of k-fold cross validation losses one for each tau value
     '''
-    ## TODO
-    return None
-    ## TODO
+    ## TODO: split into k-fold by idx
+    global idx
+    fold_size = int(math.ceil(1.0 * N / k))
+    idx = [idx[i: min(i + fold_size, N)] for i in range(0, N, fold_size)]
+
+    ## TODO: run run_on_fold() for k*taus_ammount times
+    losses = []
+    for i in range(k):
+        x_train = []
+        x_test = []
+        y_train = []
+        y_test = []
+        for n in range(N):
+            if n in idx[i]:
+                x_test.append(x[i])
+                y_test.append(y[i])
+            else:
+                x_train.append(x[i])
+                y_train.append(y[i])
+        losses = run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)
+
+    return losses
 
 
 if __name__ == "__main__":
