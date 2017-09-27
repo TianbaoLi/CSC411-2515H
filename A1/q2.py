@@ -20,6 +20,7 @@ d = x.shape[1]
 y = boston['target']
 
 idx = np.random.permutation(range(N))
+I = np.eye(d)
 
 #helper function
 def l2(A,B):
@@ -47,7 +48,6 @@ def run_on_fold(x_test, y_test, x_train, y_train, taus):
     N_test = x_test.shape[0]
     losses = np.zeros(taus.shape)
     for j,tau in enumerate(taus):
-        print(j, tau)
         predictions =  np.array([LRLS(x_test[i,:].reshape(1,d),x_train,y_train, tau) \
                         for i in range(N_test)])
         losses[j] = ((predictions-y_test)**2).mean()
@@ -69,20 +69,17 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
     X_T = np.transpose(x_train)
     dist = l2(np.array(test_datum), x_train)
     dist = dist / (2 * tau ** 2)
-    I = np.eye(d)
 
-    dist_exp = dist
+    maxAi = - min(dist[0])
+    dist_exp = np.zeros(dist.shape)
     for j in range(N_train):
-        dist_exp[0][j] = np.exp(- dist[0][j])
-
-    #maxAi = - min(dist[i])
-    #A = np.zeros(N_train * N_train).reshape(N_train, N_train)
-    #for j in range(N_train):
-    #    A[j][j] = np.exp(- (dist[i][j] - maxAi) / (2 * tau ** 2)) / np.sum(np.exp((- dist[i] - maxAi) / (2 * tau ** 2)))
+        dist_exp[0][j] = np.exp(- dist[0][j] - maxAi)
+    dist_exp_sum = np.sum(dist_exp[0])
     A = np.zeros(N_train * N_train).reshape(N_train, N_train)
+
     for j in range(N_train):
-        A[j][j] = dist_exp[0][j] / np.sum(dist_exp[0])
-        #print(A[j][j])
+        A[j][j] = dist_exp[0][j] / dist_exp_sum
+
     w = np.linalg.solve(np.dot(np.dot(X_T, A), x_train) + I * lam, np.dot(np.dot(X_T, A), y_train))
     w = np.array(w).reshape(-1, 1)
     f_xw = np.dot(test_datum, w)
