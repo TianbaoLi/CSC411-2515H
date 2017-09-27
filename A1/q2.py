@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_boston
 import math
+from scipy.special import logsumexp
 np.random.seed(0)
 
 # load boston housing prices dataset
@@ -63,10 +64,25 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
     output is y_hat the prediction on test_datum
     '''
     ## TODO
-    return None
-    ## TODO
+    X = x_train
+    Y = y_train
+    N_train = len(X)
+    X_T = np.transpose(X)
+    dist = l2(test_datum, X)
+    I = np.eye(len(test_datum))
 
+    #maxAi = - min(dist[i])
+    #A = np.zeros(N_train * N_train).reshape(N_train, N_train)
+    #for j in range(N_train):
+    #    A[j][j] = np.exp(- (dist[i][j] - maxAi) / (2 * tau ** 2)) / np.sum(np.exp((- dist[i] - maxAi) / (2 * tau ** 2)))
+    A = np.zeros(N_train * N_train).reshape(N_train, N_train)
+    for j in range(N_train):
+        A[j][j] = np.exp(- (dist[0][j]) / (2 * tau ** 2)) / np.sum(np.exp((- dist[0]) / (2 * tau ** 2)))
+    w = np.linalg.solve(np.dot(np.dot(X_T, A), X) + I * lam, np.dot(np.dot(X_T, A), Y))
+    w = np.array(w).reshape(-1, 1)
+    f_xw = np.dot(test_datum, w)
 
+    return f_xw
 
 
 def run_k_fold(x,y,taus,k):
@@ -91,11 +107,11 @@ def run_k_fold(x,y,taus,k):
         y_test = []
         for n in range(N):
             if n in idx[i]:
-                x_test.append(x[i])
-                y_test.append(y[i])
+                x_test.append(x[n])
+                y_test.append(y[n])
             else:
-                x_train.append(x[i])
-                y_train.append(y[i])
+                x_train.append(x[n])
+                y_train.append(y[n])
         losses = run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)
 
     return losses
