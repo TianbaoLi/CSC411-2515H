@@ -68,8 +68,10 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
     Y = y_train
     N_train = len(X)
     X_T = np.transpose(X)
-    dist = l2(test_datum, X)
-    I = np.eye(len(test_datum))
+    dist = l2(np.array(test_datum), X)
+    I = np.eye(d)
+    #for i in I:
+    #    print(i)
 
     #maxAi = - min(dist[i])
     #A = np.zeros(N_train * N_train).reshape(N_train, N_train)
@@ -78,6 +80,7 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
     A = np.zeros(N_train * N_train).reshape(N_train, N_train)
     for j in range(N_train):
         A[j][j] = np.exp(- (dist[0][j]) / (2 * tau ** 2)) / np.sum(np.exp((- dist[0]) / (2 * tau ** 2)))
+        #print(A[j][j])
     w = np.linalg.solve(np.dot(np.dot(X_T, A), X) + I * lam, np.dot(np.dot(X_T, A), Y))
     w = np.array(w).reshape(-1, 1)
     f_xw = np.dot(test_datum, w)
@@ -112,15 +115,16 @@ def run_k_fold(x,y,taus,k):
             else:
                 x_train.append(x[n])
                 y_train.append(y[n])
-        losses = run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)
+        losses.append(np.mean(run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)))
 
     return losses
 
 
 if __name__ == "__main__":
     # In this excersice we fixed lambda (hard coded to 1e-5) and only set tau value. Feel free to play with lambda as well if you wish
-    taus = np.logspace(1.0,3,200)
+    taus = np.logspace(1.0,3,2)
     losses = run_k_fold(x,y,taus,k=5)
+    print(losses)
     plt.plot(losses)
     print("min loss = {}".format(losses.min()))
 
