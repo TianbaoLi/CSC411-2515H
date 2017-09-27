@@ -102,7 +102,8 @@ def run_k_fold(x,y,taus,k):
     idx = [idx[i: min(i + fold_size, N)] for i in range(0, N, fold_size)]
 
     ## TODO: run run_on_fold() for k*taus_ammount times
-    losses = []
+    cross_validation = np.zeros(k * len(taus)).reshape(k, len(taus))
+    losses = np.zeros((len(taus)))
     for i in range(k):
         x_train = []
         x_test = []
@@ -115,16 +116,19 @@ def run_k_fold(x,y,taus,k):
             else:
                 x_train.append(x[n])
                 y_train.append(y[n])
-        losses.append(np.mean(run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)))
 
-    return losses
+        cross_validation[i] = run_on_fold(np.array(x_test), np.array(y_test), np.array(x_train), np.array(y_train), taus)
+    for i in range(len(taus)):
+        losses[i] = np.mean(cross_validation.T[i])
+    return np.array(losses)
 
 
 if __name__ == "__main__":
     # In this excersice we fixed lambda (hard coded to 1e-5) and only set tau value. Feel free to play with lambda as well if you wish
-    taus = np.logspace(1.0,3,2)
+    taus = np.logspace(1.0,3,10) #should be 1.0,3,200
     losses = run_k_fold(x,y,taus,k=5)
     print(losses)
-    plt.plot(losses)
+    plt.plot(taus, losses)
+    plt.show()
     print("min loss = {}".format(losses.min()))
 
