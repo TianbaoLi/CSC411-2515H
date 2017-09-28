@@ -3,17 +3,21 @@ from sklearn.datasets import load_boston
 
 BATCHES = 50
 
+
 class BatchSampler(object):
     '''
     A (very) simple wrapper to randomly sample batches without replacement.
 
     You shouldn't need to touch this.
     '''
-    
+
     def __init__(self, data, targets, batch_size):
         self.num_points = data.shape[0]
         self.features = data.shape[1]
         self.batch_size = batch_size
+
+        self.data = data
+        self.targets = targets
 
         self.indices = np.arange(self.num_points)
 
@@ -27,7 +31,7 @@ class BatchSampler(object):
             indices = np.random.choice(self.indices, self.batch_size, replace=False)
         else:
             indices = np.random.choice(self.indices, m, replace=False)
-        return indices 
+        return indices
 
     def get_batch(self, m=None):
         '''
@@ -36,9 +40,9 @@ class BatchSampler(object):
         If m is given the batch will be of size m. Otherwise will default to the class initialized value.
         '''
         indices = self.random_batch_indices(m)
-        X_batch = np.take(X, indices, 0)
-        y_batch = y[indices]
-        return X_batch, y_batch    
+        X_batch = np.take(self.data, indices, 0)
+        y_batch = self.targets[indices]
+        return X_batch, y_batch
 
 
 def load_data_and_init_params():
@@ -70,12 +74,14 @@ def cosine_similarity(vec1, vec2):
 
     return dot / (sum1 * sum2)
 
-#TODO: implement linear regression gradient
+
+# TODO: implement linear regression gradient
 def lin_reg_gradient(X, y, w):
     '''
     Compute gradient of linear regression model parameterized by w
     '''
     raise NotImplementedError()
+
 
 def main():
     # Load data and randomly initialise weights
