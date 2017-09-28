@@ -80,7 +80,13 @@ def lin_reg_gradient(X, y, w):
     '''
     Compute gradient of linear regression model parameterized by w
     '''
-    raise NotImplementedError()
+    m = X.shape[0]
+    w_T = np.transpose(w).reshape(1, -1)
+    gradient = 0.0
+    for i in range(m):
+        x = X[i].reshape(13, -1)
+        gradient += 2 * x * (np.dot(w_T, x) - y[i])
+    return gradient / m
 
 
 def main():
@@ -90,8 +96,10 @@ def main():
     batch_sampler = BatchSampler(X, y, BATCHES)
 
     # Example usage
-    X_b, y_b = batch_sampler.get_batch()
-    batch_grad = lin_reg_gradient(X_b, y_b, w)
+    for i in range(X.shape[0] / BATCHES):
+        X_b, y_b = batch_sampler.get_batch()
+        batch_grad = lin_reg_gradient(X_b, y_b, w)
+        print batch_grad
 
 
 if __name__ == '__main__':
