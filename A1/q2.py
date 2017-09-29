@@ -48,7 +48,7 @@ def run_on_fold(x_test, y_test, x_train, y_train, taus):
     N_test = x_test.shape[0]
     losses = np.zeros(taus.shape)
     for j,tau in enumerate(taus):
-        predictions =  np.array([LRLS(x_test[i,:].reshape(1,d),x_train,y_train, tau) \
+        predictions =  np.array([LRLS(x_test[i,:].reshape(d,1),x_train,y_train, tau) \
                         for i in range(N_test)])
         losses[j] = ((predictions-y_test)**2).mean()
     return losses
@@ -67,7 +67,7 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
     ## TODO
     N_train = len(x_train)
     X_T = np.transpose(x_train)
-    dist = l2(np.array(test_datum), x_train)
+    dist = l2(np.array(test_datum).T, x_train)
     dist = dist / (2 * tau ** 2)
 
     maxAi = - min(dist[0])
@@ -82,7 +82,7 @@ def LRLS(test_datum,x_train,y_train, tau,lam=1e-5):
 
     w = np.linalg.solve(np.dot(np.dot(X_T, A), x_train) + I * lam, np.dot(np.dot(X_T, A), y_train))
     w = np.array(w).reshape(-1, 1)
-    f_xw = np.dot(test_datum, w)
+    f_xw = np.dot(test_datum.T, w)
 
     return f_xw
 
