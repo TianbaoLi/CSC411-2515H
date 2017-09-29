@@ -104,10 +104,8 @@ def main():
     batch_grad /= K
     total_grad = lin_reg_gradient(X, y, w)
 
-
     mse = np.mean((batch_grad - total_grad) ** 2)
-    cosine = cosine_similarity(batch_grad, total_grad)
-
+    cosine = cosine_similarity(batch_grad[:, 0], total_grad[:, 0])
     print("Squared distance metric:", mse)
     print("Cosine similarity:", cosine)
 
