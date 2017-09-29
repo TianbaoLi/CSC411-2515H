@@ -13,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/A1$q3.coverage" NAME="q3 Coverage Results" MODIFIED="1506658093588" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/A1$q3.coverage" NAME="q3 Coverage Results" MODIFIED="1506706662539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/A1$q1.coverage" NAME="q1 Coverage Results" MODIFIED="1506439901932" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/A1$q2.coverage" NAME="q2 Coverage Results" MODIFIED="1506657938784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
@@ -32,8 +32,8 @@
       <file leaf-file-name="q3.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/q3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="107" column="63" lean-forward="false" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
+            <state relative-caret-position="170">
+              <caret line="123" column="11" lean-forward="false" selection-start-line="123" selection-start-column="11" selection-end-line="123" selection-end-column="11" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -323,19 +323,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/q1.py">
+    <entry file="file://$PROJECT_DIR$/q2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="70" column="34" lean-forward="true" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="34" />
+        <state relative-caret-position="126">
+          <caret line="65" column="7" lean-forward="true" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/q2.py">
+    <entry file="file://$PROJECT_DIR$/q1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="65" column="7" lean-forward="true" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
-          <folding />
+        <state relative-caret-position="396">
+          <caret line="31" column="31" lean-forward="true" selection-start-line="31" selection-start-column="31" selection-end-line="31" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -349,8 +351,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/q3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="107" column="63" lean-forward="false" selection-start-line="107" selection-start-column="63" selection-end-line="107" selection-end-column="63" />
+        <state relative-caret-position="170">
+          <caret line="123" column="11" lean-forward="false" selection-start-line="123" selection-start-column="11" selection-end-line="123" selection-end-column="11" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

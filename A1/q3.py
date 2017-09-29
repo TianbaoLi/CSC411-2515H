@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.datasets import load_boston
 
 BATCHES = 50
@@ -89,14 +90,20 @@ def lin_reg_gradient(X, y, w):
     return gradient / m
 
 
+def var(vec):
+    mean = np.mean(vec)
+    return np.sum((vec - mean) ** 2) / vec.shape[0]
+
+
 def main():
     # Load data and randomly initialise weights
     X, y, w = load_data_and_init_params()
     # Create a batch sampler to generate random batches from data
     batch_sampler = BatchSampler(X, y, BATCHES)
+    feature_count = w.shape[0]
 
     # Example usage
-    K = 12
+    K = 500
     batch_grad = 0.0
     for i in range(K):
         X_b, y_b = batch_sampler.get_batch()
@@ -104,10 +111,36 @@ def main():
     batch_grad /= K
     total_grad = lin_reg_gradient(X, y, w)
 
+    print("For m=50, K=500:")
     mse = np.mean((batch_grad - total_grad) ** 2)
     cosine = cosine_similarity(batch_grad[:, 0], total_grad[:, 0])
+    print("Batch gradients:", batch_grad)
+    print("Total gradients:", total_grad)
     print("Squared distance metric:", mse)
     print("Cosine similarity:", cosine)
+    print('-------------------------------------------\n\n\n')
+
+
+    M = 400
+    vars = np.zeros(M * feature_count).reshape(M, feature_count)
+    for m in range(M):
+        grad = np.zeros(K * feature_count).reshape(K, feature_count)
+        for i in range(K):
+            X_b, y_b = batch_sampler.get_batch(m + 1)
+            grad[i] = np.array(lin_reg_gradient(X_b, y_b, w)).reshape(1, -1)
+
+        for f in range(feature_count):
+            vars[m][f] = var(grad[:, f])
+
+    for i in range(feature_count):
+        plt.subplot(3, 5, i + 1)
+        #TODO: Plot feature i against y
+        plt.scatter(range(M), vars[:, i], s = 1)
+        plt.xlabel('M')
+        plt.ylabel('TARGET')
+
+    plt.tight_layout()
+    plt.show()
 
 
 if __name__ == '__main__':
