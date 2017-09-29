@@ -96,10 +96,20 @@ def main():
     batch_sampler = BatchSampler(X, y, BATCHES)
 
     # Example usage
-    for i in range(X.shape[0] / BATCHES):
+    K = 12
+    batch_grad = 0.0
+    for i in range(K):
         X_b, y_b = batch_sampler.get_batch()
-        batch_grad = lin_reg_gradient(X_b, y_b, w)
-        print batch_grad
+        batch_grad += lin_reg_gradient(X_b, y_b, w)
+    batch_grad /= K
+    total_grad = lin_reg_gradient(X, y, w)
+
+
+    mse = np.mean((batch_grad - total_grad) ** 2)
+    cosine = cosine_similarity(batch_grad, total_grad)
+
+    print("Squared distance metric:", mse)
+    print("Cosine similarity:", cosine)
 
 
 if __name__ == '__main__':
