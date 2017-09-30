@@ -133,13 +133,14 @@ def main():
             vars[m][f] = var(grad[:, f])
 
     for i in range(feature_count):
-        plt.subplot(3, 5, i + 1)
+        plt.subplot(4, 4, i + 1)
         #TODO: Plot feature i against y
-        plt.scatter(range(M), vars[:, i], s = 1)
-        plt.xlabel('M')
-        plt.ylabel('TARGET')
+        plt.plot(range(M), vars[:, i])
+        plt.xlabel('m')
+        plt.ylabel('var')
+        plt.xticks(np.arange(0, M, M / 2))
 
-    plt.tight_layout()
+    plt.tight_layout(pad = 0.2)
     plt.show()
 
 
