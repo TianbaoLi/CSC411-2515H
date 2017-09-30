@@ -18,6 +18,7 @@ def summarize_data(X, y, features):
     print("Features: {}".format(features))
     print("Mean house price: {}".format(np.mean(y)))
     print("Standard deviation of house price: {}".format(np.std(y)))
+    print("Mean of features: {}".format([np.mean(X[:, i]) for i in range(len(features))]))
 
 
 def visualize(X, y, features):
@@ -35,8 +36,8 @@ def visualize(X, y, features):
     plt.tight_layout()
     plt.show()
 
-def split_data(X, y, training_ratio = 0.2):
-    test_chosen = np.random.choice(len(X), int(len(X) * training_ratio))
+def split_data(X, y, test_ratio = 0.2):
+    test_chosen = np.random.choice(len(X), int(len(X) * test_ratio))
     training_set_x = []
     test_set_x = []
     training_set_y = []
