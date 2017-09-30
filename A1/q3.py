@@ -81,14 +81,14 @@ def lin_reg_gradient(X, y, w):
     '''
     Compute gradient of linear regression model parameterized by w
     '''
+    feature_count = w.shape[0]
     m = X.shape[0]
     w_T = np.transpose(w).reshape(1, -1)
-    gradient = 0.0
+    gradient = np.zeros(feature_count * 1).reshape(feature_count, 1)
     for i in range(m):
-        x = X[i].reshape(13, -1)
+        x = X[i].reshape(-1, 1)
         gradient += 2 * x * (np.dot(w_T, x) - y[i])
     return gradient / m
-
 
 def var(vec):
     mean = np.mean(vec)
