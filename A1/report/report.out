@@ -1,3 +1,9 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Exploring the derivative using Sage}{}% 2
-\BOOKMARK [1][-]{section.3}{Conclusions}{}% 3
+\BOOKMARK [1][-]{section.1}{Q1: Leanring basics of regressoion in Python}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Data loading}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Data summarization}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Feature visualization}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Data division}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Linear regression}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Feature weights}{section.1}% 7
+\BOOKMARK [2][-]{subsection.1.7}{Model test}{section.1}% 8
+\BOOKMARK [2][-]{subsection.1.8}{Feature selection}{section.1}% 9

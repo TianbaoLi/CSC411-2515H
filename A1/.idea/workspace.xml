@@ -4,8 +4,7 @@
     <list default="true" id="f83bf8c1-3910-4180-89a6-3f146eebcd62" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/report.pdf" afterPath="$PROJECT_DIR$/report/report.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/report.synctex.gz" afterPath="$PROJECT_DIR$/report/report.synctex.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/q3.py" afterPath="$PROJECT_DIR$/q3.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/q1.py" afterPath="$PROJECT_DIR$/q1.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/report.aux" afterPath="$PROJECT_DIR$/report/report.aux" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/report.fdb_latexmk" afterPath="$PROJECT_DIR$/report/report.fdb_latexmk" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/report/report.fls" afterPath="$PROJECT_DIR$/report/report.fls" />
@@ -22,16 +21,16 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/A1$q3.coverage" NAME="q3 Coverage Results" MODIFIED="1506797147778" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/A1$q1.coverage" NAME="q1 Coverage Results" MODIFIED="1506796059325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/A1$q1.coverage" NAME="q1 Coverage Results" MODIFIED="1506801926221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/A1$q2.coverage" NAME="q2 Coverage Results" MODIFIED="1506733007000" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="q1.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="q1.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/q1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="62" column="24" lean-forward="true" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
+            <state relative-caret-position="540">
+              <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="29" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -52,18 +51,18 @@
       <file leaf-file-name="q2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/q2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="65" column="7" lean-forward="false" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
+            <state relative-caret-position="199">
+              <caret line="68" column="22" lean-forward="false" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="q3.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="q3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/q3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="147" column="10" lean-forward="true" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
+            <state relative-caret-position="1530">
+              <caret line="85" column="22" lean-forward="false" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="22" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -82,6 +81,7 @@
       <find>13.</find>
       <find>14.2</find>
       <find>23.3</find>
+      <find>transpose</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -91,8 +91,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/q2.py" />
-        <option value="$PROJECT_DIR$/q1.py" />
         <option value="$PROJECT_DIR$/q3.py" />
+        <option value="$PROJECT_DIR$/q1.py" />
       </list>
     </option>
   </component>
@@ -177,7 +177,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.q3">
+  <component name="RunManager" selected="Python.q1">
     <configuration name="q1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -405,28 +405,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/q2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="65" column="7" lean-forward="false" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
+        <state relative-caret-position="199">
+          <caret line="68" column="22" lean-forward="false" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="22" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/q1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="62" column="24" lean-forward="true" selection-start-line="62" selection-start-column="24" selection-end-line="62" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/q3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="147" column="10" lean-forward="true" selection-start-line="147" selection-start-column="10" selection-end-line="147" selection-end-column="10" />
+        <state relative-caret-position="1530">
+          <caret line="85" column="22" lean-forward="false" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="22" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/q1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="30" column="29" lean-forward="false" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>

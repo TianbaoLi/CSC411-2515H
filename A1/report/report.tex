@@ -5,118 +5,176 @@
 \usepackage{tikz} % Package for drawing
 \usepackage{amsmath}
 \usepackage{hyperref}
+ \usepackage{listings} % iPackage for code
 
-\title{Understanding the Derivative}
-\author{Vincent Knight}
-\date{1984/02/14}
+\title{CSC411 Fall 2017\\Assignment 1 Report}
+\author{Tianbao Li}
+\date{2017/09/30}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+In this assignemnt, we use the dataset of \href{http://lib.stat.cmu.edu/datasets/boston}{Boston Housing data}.
 
-Differentiation is a concept of Mathematics studied in Calculus. There is an ongoing discussion as to who was the first to define differentiation: Leibniz or Newton \cite{bardi2006calculus}.
+\section{Q1: Leanring basics of regressoion in Python}
 
-Differentiation allows for the calculation of the slope of the tangent of a curve at any given point as shown in Figure \ref{exampleplot}.
+\subsection{Data loading}
 
-\begin{figure}[!htbp]
-\begin{center}
-\begin{tikzpicture}
-\draw[domain=-2:2, color=blue] plot (\x, {1 - (\x)^2}) node[above = .5cm, right, color=blue] {$f(x)=1-x^2$};
-\draw[domain=-2:2, color=red] plot(\x,-1 * \x + 1.25) node[above = .5cm, right, color=red] {Tangent at $x=.5$};
-\draw [thick, ->] (-3,0) -- (3,0) node [above] {$x$};
-\draw [thick, ->] (0,-3) -- (0,3) node [right] {$y$};
-\node at (.5,.75) {\textbullet};
-\end{tikzpicture}
-\end{center}
-\caption{The plot of $f(x)=1-x^2$ with a tangent at $x=.5$.}\label{exampleplot}
+Here, we use function in sklearn.dataset() to read Boston Housing data.
+
+\begin{lstlisting}[language = Python]
+def load_data():
+    boston = datasets.load_boston()
+    X = boston.data
+    y = boston.target
+    features = boston.feature_names
+    return X,y,features
+\end{lstlisting}
+
+In the return variables, $X$ is several lines of data on each feature, $y$ is the target value for each line of data, $features$ contains the names of all the features.
+
+\subsection{Data summarization}
+
+The input dataset has the folowing properties:
+
+\begin{itemize}
+	\item number of data points: 506
+	\item dimensions: 13
+	\item features: ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO' 'B' 'LSTAT']
+    \item Mean house price: 22.5328063241
+    \item Standard deviation of house price: 9.18801154528
+\end{itemize}
+
+\subsection{Feature visualization}
+
+Data distribution on each feature is shown in Figure\ref{fig: Data distribution}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 15cm]{DataDistribution}
+\caption{Data points against target for each feature}
+\label{fig: Data distribution}
 \end{figure}
 
-Differentiation is now a technique taught to mathematics students throughout the world. In this document I will discuss some aspects of differentiation.
+\subsection{Data division}
 
-\section{Exploring the derivative using Sage}
+To divide training data set and test data set, in Q1, we use function numpy.random.choice() to implement function split\_data(X, y, training\_ratio = 0.2).
 
-The definition of the limit of $f(x)$ at $x=a$ denoted as $f'(a)$ is:
+\begin{lstlisting}[language = Python]
+def split_data(X, y, training_ratio = 0.2):
+    test_chosen = np.random.choice(len(X), int(len(X) * training_ratio))
+    ......
+    return training_set_x, test_set_x, training_set_y, test_set_y
+\end{lstlisting}
+
+In the function, we split $X$ and $y$ into $training_set_x$, $test_set_x$, $training_set_y$, $test_set_y$ according to $training_ratio$ for future usage.
+
+\subsection{Linear regression}
+
+To solve linear regression problem and get the weightes $w$, we use numpy.linalg.solve() on the formula:
 
 \begin{equation}
-f'(a) = \lim_{h\to0}\frac{f(a+h)-f(a)}{h}
+X^\mathrm{T}Xw^*=X^\mathrm{T}y
 \end{equation}
 
-The following code can be used in sage to give the above limit:
+\subsection{Feature weights}
 
-\begin{verbatim}
-def illustrate(f, a):
-    """
-    Function to take a function and illustrate the limiting definition of a derivative at a given point.
-    """
-    lst = []
-    for h in srange(.01, 3, .01):
-    	lst.append([h,(f(a+h)-f(a))/h])
-    return list_plot(lst, axes_labels=['$x$','$\\frac{f(%.02f+h)-f(%.02f)}{h}$' % (a,a)])
-\end{verbatim}
+After the calculation, we can get the weight on each feature as shown in Table\ref{tab: Feature weights}
 
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=8cm]{sage1.png}
-\end{center}
-\caption{The derivative of $f(x)=1-x^2$ at $x=.5$ converging to -1 as $h\to0$.}
-\end{figure}
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|}
+    \hline
+    Feature & Weight & Mean\\
+    \hline
+    CRIM & 41.795688882257188 & 3.5937607114624512\\
+    \hline
+    ZN & -0.13159561392787489 & 11.363636363636363\\
+    \hline
+    INDUS & 0.056336470652065491 & 11.136778656126481\\
+    \hline
+    CHAS & 0.033639549287715828 & 0.069169960474308304\\
+    \hline
+    NOX & 3.7698365450326135 & 0.55469505928853757\\
+    \hline
+    RM & -19.35371695539391 & 6.2846343873517787\\
+    \hline
+    AGE & 3.1091523339672826 & 68.574901185770756\\
+    \hline
+    DIS & 0.010472276182880488 & 3.7950426877470358\\
+    \hline
+    RAD & -1.5681353658907364
+     & 9.5494071146245059\\
+    \hline
+    TAX & 0.33065329716511299 & 408.23715415019763\\
+    \hline
+    PTRATIO & -0.011395113448445227 & 18.455533596837945\\
+    \hline
+    B & -0.97967928714208496 & 356.67403162055342\\
+    \hline
+    LSTAT & 0.0096343495439206173 & 12.653063241106722\\
+    \hline
+    \end{tabular}
+\caption{Feature weights}
+\label{tab: Feature weights}
+\end{table}
 
-If we want to plot the tangent at a point $\alpha$ to a function we can use the following:
+Here, we take the feature 'INDUS' (proportion of non-retail business acres per town) as an analysis example. Shown in Table\ref{tab: Feature weights}, we can see feature 'INDUS' has a weight of 0.056336470652065491. As a positive weight, the sign means that is has a positive influence in the target, the housing price. In general ideas, people likes to live in the areas with more shops, which means that house price could be higher. That just fits the result.
 
-\begin{align}
-y=&ax+b&&\text{(definition of a straight line)}\nonumber\\
-  &f'(a)x+b&&\text{(definition of the derivative)}\nonumber\\
-  &f'(a)x+f(a)-f'(a)a&&\text{(we know that the line intersects $f$ at $(a,f(a))$}\nonumber
-\end{align}
+\subsection{Model test}
+We use $20\%$ of the data as test date to just the fitness of the model. Here are some results of different metics:
 
-We can combine this with the approach of the previous piece of code to see how the tangential line converges as the limiting definition of the derivative converges:
+\begin{itemize}
+    \item MSE: 18.268879264780917
+    \item MAE: 3.1172529292203892
+    \item R2: 0.75025578036036022
+\end{itemize}
 
-\begin{verbatim}
-def convergetangentialline(f, a, x1, x2, nbrofplots=50, epsilon=.1):
-    """
-    Function to make a tangential line converge
-    """
-    clrs = rainbow(nbrofplots)
-    k = 0
-    h = epsilon
-    p = plot(f, x, x1, x2)
-    while k < nbrofplots:
-        tangent(x) = fdash(f, a, h) * x + f(a) - fdash(f, a, h) * a
-        p += plot(tangent(x), x, x1, x2, color=clrs[k])
-        h += epsilon
-        k += 1
-    return p
-\end{verbatim}
+These numbers could change due to different training-test dataset division.
 
-The plot shown in Figure \ref{lines} shows how the lines shown converge to the actual tangent to $1-x^2$ as $x=2$ (the red line is the `closest' curve).
+\subsection{Feature selection}
 
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=8cm]{sage0.png}
-\end{center}
-\caption{Lines converging to the tangent curve as $h\to0$.}\label{lines}
-\end{figure}
+To choose the most significan feature, weight of teh featuers are a good metrics. However, due to the different magnitudes of weights, we decide to multiply weight and mean for each feature and use it as the influnce on the target. It is shown as FIgure\ref{tab: Feature influence}.
 
-Note here that the last plot is given using the \textbf{real} definition of the derivative and not the approximation.
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|}
+    \hline
+    Feature & Inluence\\
+    \hline
+    CRIM & 150.2037046136\\
+    \hline
+    ZN & -1.4954047037\\
+    \hline
+    INDUS & 0.6274068039\\
+    \hline
+    CHAS & 0.0023268463\\
+    \hline
+    NOX & 2.0911097059\\
+    \hline
+    RM & -121.6310351009\\
+    \hline
+    AGE & 213.2098140733\\
+    \hline
+    DIS & 0.0397427352\\
+    \hline
+    RAD & -14.9747630197\\
+    \hline
+    TAX & 134.9849610451\\
+    \hline
+    PTRATIO & -0.2103028991\\
+    \hline
+    B & -349.4261610401\\
+    \hline
+    LSTAT & 0.1219040341\\
+    \hline
+    \end{tabular}
+\caption{Feature weights}
+\label{tab: Feature influence}
+\end{table}
 
-\section{Conclusions}
-
-In this report I have explored the limiting definition of the limit showing how as $h\to 0$ we can visualise the derivative of a function. The code involved \url{https://sage.maths.cf.ac.uk/home/pub/18/} uses the differentiation capabilities of Sage but also the plotting abilities.
-
-There are various other aspects that could be explored such as symbolic differentiation rules. For example:
-
-$$\frac{dx^n}{dx}=(n+1)x^{n}\text{ if }x\ne-1$$
-
-Furthermore it is interesting to not that there exists some functions that \textbf{are not} differentiable at a point such as the function $f(x)=\sin(1/x)$ which is not differentiable at $x=0$. A plot of this function is shown in Figure \ref{notdiff}.
-
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=8cm]{sage2.png}
-\end{center}
-\caption{None differentiable function at $x=0$.}\label{notdiff}
-\end{figure}
+From the table, we can see that the feature 'B' has the largest absolute value, which means 'B' predicts the price best.
 
 
 \bibliographystyle{plain}
