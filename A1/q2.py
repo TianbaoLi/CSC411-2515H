@@ -128,6 +128,9 @@ if __name__ == "__main__":
     losses = run_k_fold(x,y,taus,k=5)
     print(losses)
     plt.plot(taus, losses)
+    plt.xlabel('tau')
+    plt.ylabel('loss value')
     plt.show()
     print("min loss = {}".format(losses.min()))
+    print("arg loss = {}".format(losses.mean()))
 
