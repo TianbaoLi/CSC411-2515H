@@ -10,3 +10,4 @@
 \BOOKMARK [1][-]{section.2}{Q2: Locally reweighted regression}{}% 10
 \BOOKMARK [2][-]{subsection.2.1}{w* solution proof}{section.2}% 11
 \BOOKMARK [2][-]{subsection.2.2}{LRLS implementation}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.3}{K-fold corss-validation}{section.2}% 13

@@ -214,6 +214,9 @@ INPUT ./DataDistribution-eps-converted-to.pdf
 INPUT ./DataDistribution-eps-converted-to.pdf
 INPUT /usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT tau-lossvalue.png
+INPUT ./tau-lossvalue.png
+INPUT ./tau-lossvalue.png
 INPUT report.aux
 INPUT ./report.out
 INPUT ./report.out

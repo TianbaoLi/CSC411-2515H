@@ -215,6 +215,33 @@ where $X$ is the design matrix (defined in class) and $A$ is a diagonal matrix w
 
 \subsection{LRLS implementation}
 
+Some essential things in LRLS implemented:
+
+\begin{itemize}
+    \item $\|x-x^{(i)}\|^2$ in $a^{(i)}$ calculation: using provided function l2(A,B)
+    \item solving $w^*$: using numpy.linalg.solve()
+    \item avoiding overflows/underflows: adding $-max_jA_j$in square distance calculation
+\end{itemize}
+
+\subsection{K-fold corss-validation}
+
+In this question, we choose $\tau$ from$[10, 1000]$ and proceed cross-validation on different $\tau$value. The variation of loss value is shown in Figure\ref{fig: Tau_loss}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{tau-lossvalue}
+\caption{Loss value for each $\tau$}
+\label{fig: Tau_loss}
+\end{figure}
+
+From the figure we can see that, loss value has the following tending:
+
+\begin{itemize}
+    \item when$\tau \to 0$, loss value tends towards $+\infty$
+    \item when$\tau \to +\infty$, loss value tends tpwards $0$
+\end{itemize}
+
+For $\tau$ in$[10, 1000]$, mean value of the loss is 158.987350941, and the minimun value of the loss is 147.119838286.
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
