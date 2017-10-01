@@ -135,10 +135,9 @@ def main():
     for i in range(feature_count):
         plt.subplot(4, 4, i + 1)
         #TODO: Plot feature i against y
-        plt.plot(range(M), vars[:, i])
+        plt.plot(np.log(range(1, M + 1)), np.log(vars[:, i]))
         plt.xlabel('m')
         plt.ylabel('var')
-        plt.xticks(np.arange(0, M, M / 2))
 
     plt.tight_layout(pad = 0.2)
     plt.show()
