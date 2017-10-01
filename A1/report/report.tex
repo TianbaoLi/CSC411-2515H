@@ -5,7 +5,9 @@
 \usepackage{tikz} % Package for drawing
 \usepackage{amsmath}
 \usepackage{hyperref}
- \usepackage{listings} % iPackage for code
+\usepackage{listings} % iPackage for code
+\usepackage{amsthm}
+\usepackage{amsmath}
 
 \title{CSC411 Fall 2017\\Assignment 1 Report}
 \author{Tianbao Li}
@@ -175,6 +177,43 @@ To choose the most significan feature, weight of teh featuers are a good metrics
 \end{table}
 
 From the table, we can see that the feature 'B' has the largest absolute value, which means 'B' predicts the price best.
+
+\section{Q2: Locally reweighted regression}
+
+\subsection{$w^*$ solution proof}
+
+Given $(x^{(1)}, y^{(1)}), \dots, (x^{(N)}, y^{(N)})$ and positive weights $a^{(1)}, \dots, a^{(N)}$, show that the solution to the weighted least square ploblem
+
+\begin{equation}
+w^*=\operatorname{argmin}\frac{1}{2}\sum_{i=1}^Na^{(i)}(y^{(i)}-w^\mathrm{T}x^{(i)})^2+\frac{\lambda}{2}\|w\|^2
+\end{equation}
+
+is given bu the formula
+
+\begin{equation}
+w^*=(X^\mathrm{T}AX+\lambda I)^{-1}X^\mathrm{T}Ay
+\end{equation}
+
+where $X$ is the design matrix (defined in class) and $A$ is a diagonal matrix where $A_{ii}=a^{(i)}$
+
+\begin{proof}
+    \begin{align*}
+        w^*&=\operatorname{argmin}\frac{1}{2}\sum_{i=1}^Na^{(i)}(y^{(i)}-w^\mathrm{T}x^{(i)})^2+\frac{\lambda}{2}\|w\|^2\\
+        L(w^*)&=\frac{1}{2}\sum_{i=1}^Na^{(i)}(y^{(i)}-w^\mathrm{T}x^{(i)})^2+\frac{\lambda}{2}\|w\|^2\\
+        &=\frac{1}{2}A\|y-Xw\|^2+\frac{\lambda}{2}\|w\|^2\\
+        &=\frac{1}{2}(y-Xw)^\mathrm{T}A(y-Xw)+\frac{\lambda}{2}\|w\|^2\\
+        &=\frac{1}{2}(y^\mathrm{T}Ay-2w^\mathrm{T}X^\mathrm{T}Ay+w^\mathrm{T}X^\mathrm{T}AXw)+\frac{\lambda}{2}\|w\|^2\\
+        \nabla L(w^*)&=\frac{1}{2}(-2X^\mathrm{T}Ay+2X^\mathrm{T}AXw)+\lambda w\\
+        &=X^\mathrm{T}AXw+\lambda w-X^\mathrm{T}Ay\\
+    \end{align*}
+    \qquad Setting this gradient to zero gives\\
+    \begin{align*}
+        X^\mathrm{T}Ay&=X^\mathrm{T}AXw+\lambda w\\
+        w^*&=(X^\mathrm{T}AX+\lambda I)^{-1}X^\mathrm{T}Ay
+    \end{align*}
+\end{proof}
+
+\subsection{LRLS implementation}
 
 
 \bibliographystyle{plain}
