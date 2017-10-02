@@ -136,8 +136,8 @@ def main():
         plt.subplot(4, 4, i + 1)
         #TODO: Plot feature i against y
         plt.plot(np.log(range(1, M + 1)), np.log(vars[:, i]))
-        plt.xlabel('m')
-        plt.ylabel('var')
+        plt.xlabel('log(m)')
+        plt.ylabel('log(var)')
 
     plt.tight_layout(pad = 0.2)
     plt.show()
