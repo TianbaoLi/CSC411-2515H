@@ -237,6 +237,9 @@ INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT tau-lossvalue.png
 INPUT ./tau-lossvalue.png
 INPUT ./tau-lossvalue.png
+INPUT m-gradvar.png
+INPUT ./m-gradvar.png
+INPUT ./m-gradvar.png
 INPUT report.aux
 INPUT ./report.out
 INPUT ./report.out

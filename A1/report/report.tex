@@ -51,7 +51,7 @@ The input dataset has the folowing properties:
 
 \subsection{Feature visualization}
 
-Data distribution on each feature is shown in Figure\ref{fig: Data distribution}.
+Data distribution on each feature is shown in Figure~\ref{fig: Data distribution}.
 
 \begin{figure}[htbp]
 \centering
@@ -83,7 +83,7 @@ To solve linear regression problem and get the weightes $w$, we use numpy.linalg
 
 \subsection{Feature weights}
 
-After the calculation, we can get the weight on each feature as shown in Table\ref{tab: Feature weights}
+After the calculation, we can get the weight on each feature as shown in Table~\ref{tab: Feature weights}.
 
 \begin{table}[htbp]
 \centering
@@ -138,7 +138,7 @@ These numbers could change due to different training-test dataset division.
 
 \subsection{Feature selection}
 
-To choose the most significan feature, weight of teh featuers are a good metrics. However, due to the different magnitudes of weights, we decide to multiply weight and mean for each feature and use it as the influnce on the target. It is shown as FIgure\ref{tab: Feature influence}.
+To choose the most significan feature, weight of teh featuers are a good metrics. However, due to the different magnitudes of weights, we decide to multiply weight and mean for each feature and use it as the influnce on the target. It is shown as Table~\ref{tab: Feature influence}.
 
 \begin{table}[htbp]
 \centering
@@ -226,7 +226,7 @@ Some essential things in LRLS implemented:
 
 \subsection{K-fold corss-validation}
 
-In this question, we choose $\tau$ from$[10, 1000]$ and proceed cross-validation on different $\tau$value. The variation of loss value is shown in Figure\ref{fig: Tau_loss}. For $\tau$ in$[10, 1000]$, mean value of the loss is 158.987350941, and the minimun value of the loss is 147.119838286.
+In this question, we choose $\tau$ from$[10, 1000]$ and proceed cross-validation on different $\tau$value. The variation of loss value is shown in Figure~\ref{fig: Tau_loss}. For $\tau$ in$[10, 1000]$, mean value of the loss is 158.987350941, and the minimun value of the loss is 147.119838286.
 
 \begin{figure}[htbp]
 \centering
@@ -292,6 +292,42 @@ Show that $\mathbb{E}_\mathcal{I}[\nabla L_{\mathcal{I}}(x,y,\theta)]=\nabla L(x
         \therefore\mathbb{E}_\mathcal{I}[\nabla L_{\mathcal{I}}(x,y,\theta)]=\nabla L(x,y,\theta)
     \end{equation*}
 \end{proof}
+
+\subsection{Mini-batch expectations}
+
+As the proofs above, expectations of mean value and gradient of mini-batch is just the same like the ones of full-batch, which means different data choices of mini-batch and full-batch return the same result.
+
+\subsection{Gradient implementation}
+
+For loss funtion $\ell(x,y,w)=(y-w^{\mathrm{T}}x)^2$, its gradient can be presented as:
+
+\begin{equation}
+    \nabla\ell(x,y,w)=2x(w^{\mathrm{T}}x-y)
+\end{equation}
+
+In the code implementation, gradient is computed by the formula above.
+
+\subsection{Mini-batch gradient VS true gradient}
+
+In this part, we set $m=50$ and $K=500$. To compare the gradient value between mini-batch and the true gradient (entire data set), we use following metrics:
+
+\begin{itemize}
+    \item squared distance metric: 36232.487235814442
+    \item cosine similarity: 0.99999783659754915
+\end{itemize}
+
+For these two metrics, cosine similarity is a more meaningful measure in this case. Square distance metric is hard to judge just because we can not tell the difference simply from one value. However, for cosine similarity valued in $[0,1]$, value tending to 1 means the gradients are very similar. We can easily judge this.
+
+\subsection{Affect of batch size}
+
+Here, we give out the figures of $\log\tilde{\sigma}_j$ against $\log(m)$ on all features to show the influence of batch size om the gradient varience. It is shown as Figure~\ref{fig: M VS gradient variance}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 15cm]{m-gradvar}
+\caption{Log(m) against log(gradient variance) for each feature}
+\label{fig: M VS gradient variance}
+\end{figure}
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
