@@ -8,6 +8,7 @@
 \usepackage{listings} % iPackage for code
 \usepackage{amsthm}
 \usepackage{amsmath}
+\usepackage{amssymb}
 
 \title{CSC411 Fall 2017\\Assignment 1 Report}
 \author{Tianbao Li}
@@ -77,7 +78,7 @@ In the function, we split $X$ and $y$ into $training_set_x$, $test_set_x$, $trai
 To solve linear regression problem and get the weightes $w$, we use numpy.linalg.solve() on the formula:
 
 \begin{equation}
-X^\mathrm{T}Xw^*=X^\mathrm{T}y
+    X^\mathrm{T}Xw^*=X^\mathrm{T}y
 \end{equation}
 
 \subsection{Feature weights}
@@ -185,13 +186,13 @@ From the table, we can see that the feature 'B' has the largest absolute value, 
 Given $(x^{(1)}, y^{(1)}), \dots, (x^{(N)}, y^{(N)})$ and positive weights $a^{(1)}, \dots, a^{(N)}$, show that the solution to the weighted least square ploblem
 
 \begin{equation}
-w^*=\operatorname{argmin}\frac{1}{2}\sum_{i=1}^Na^{(i)}(y^{(i)}-w^\mathrm{T}x^{(i)})^2+\frac{\lambda}{2}\|w\|^2
+    w^*=\operatorname{argmin}\frac{1}{2}\sum_{i=1}^Na^{(i)}(y^{(i)}-w^\mathrm{T}x^{(i)})^2+\frac{\lambda}{2}\|w\|^2
 \end{equation}
 
 is given bu the formula
 
 \begin{equation}
-w^*=(X^\mathrm{T}AX+\lambda I)^{-1}X^\mathrm{T}Ay
+    w^*=(X^\mathrm{T}AX+\lambda I)^{-1}X^\mathrm{T}Ay
 \end{equation}
 
 where $X$ is the design matrix (defined in class) and $A$ is a diagonal matrix where $A_{ii}=a^{(i)}$
@@ -206,7 +207,7 @@ where $X$ is the design matrix (defined in class) and $A$ is a diagonal matrix w
         \nabla L(w^*)&=\frac{1}{2}(-2X^\mathrm{T}Ay+2X^\mathrm{T}AXw)+\lambda w\\
         &=X^\mathrm{T}AXw+\lambda w-X^\mathrm{T}Ay\\
     \end{align*}
-    \qquad Setting this gradient to zero gives\\
+    \qquad Setting this gradient to zero gives
     \begin{align*}
         X^\mathrm{T}Ay&=X^\mathrm{T}AXw+\lambda w\\
         w^*&=(X^\mathrm{T}AX+\lambda I)^{-1}X^\mathrm{T}Ay
@@ -237,9 +238,60 @@ In this question, we choose $\tau$ from$[10, 1000]$ and proceed cross-validation
 From the figure we can see that, loss value has the following tending:
 
 \begin{itemize}
+
     \item when $\tau \to 0$, loss value tends towards $+\infty$
     \item when $\tau \to +\infty$, loss value tends towards $0$
 \end{itemize}
+
+\section{Q3: Mini-batch SGD gradient estimator}
+
+\subsection{Mini-batch mean value proof}
+
+Given a set $\{a_1, \dots, a_n\}$ and random mini-batchs $\mathcal{I}$ of size $m$, show that
+
+\begin{equation}
+    \mathbb{E}_{\mathcal{I}}[\frac{1}{m}\sum_{i\in \mathcal{I}}a_i]=\frac{1}{n}\sum_{i=1}^na_i
+\end{equation}
+
+\begin{proof}
+    \qquad As $a_i$ is randomly sampled
+    \begin{align*}
+        p(a_1)&=p(a_2)=\dots=p(a_i)=\dots=p(a_n)\\
+        \mathbb{E}(a_1)&=\mathbb{E}(a_2)=\dots=\mathbb{E}(a_i)=\dots=\mathbb{E}(a_n)
+    \end{align*}
+
+    \begin{align*}
+        \therefore\mathbb{E}_{\mathcal{I}}[\frac{1}{m}\sum_{i\in \mathcal{I}}a_i]&=\frac{1}{m}\mathbb{E}_{\mathcal{I}}[\sum_{i\in \mathcal{I}}a_i]\\
+        &=\frac{1}{m}[\mathbb{E}(a_1)+\dots+\mathbb{E}(a_m)]\\
+        &=\frac{1}{m}*[m*\mathbb{E}(a)]\\
+        &=\mathbb{E}(a)\\
+        &=\frac{1}{n}\sum_{i=1}^na_i
+    \end{align*}
+\end{proof}
+
+\subsection{Mini-batch gradient proof}
+
+Show that $\mathbb{E}_\mathcal{I}[\nabla L_{\mathcal{I}}(x,y,\theta)]=\nabla L(x,y,\theta)$
+
+\begin{proof}
+    \begin{align*}
+        \mathbb{E}_\mathcal{I}[\nabla L_{\mathcal{I}}(x,y,\theta)]&=\mathbb{E}_\mathcal{I}[\nabla(\frac{1}{m}\sum_{i\in\mathcal{I}}\ell(x^{(i)},y^{(i)},\theta))]\\
+        &=\frac{1}{m}\mathbb{E}_\mathcal{I}[\nabla(\sum_{i\in\mathcal{I}}\ell(x^{(i)},y^{(i)},\theta))]\\
+        &=\frac{1}{m}\mathbb{E}_\mathcal{I}[\sum_{i\in\mathcal{I}}\nabla\ell(x^{(i)},y^{(i)},\theta)]\\
+        &=\frac{1}{m}\mathbb{E}_\mathcal{I}[\sum_{i\in\mathcal{I}}\ell(x^{(i)},y^{(i)},\theta+\Delta\theta)-\ell(x^{(i)},y^{(i)},\theta)]\\
+        &=\frac{1}{m}\mathbb{E}_\mathcal{I}[(\ell(x^{(1)},y^{(1)},\theta+\Delta\theta)-\ell(x^{(1)},y^{(1)},\theta))+\dots\\&\qquad+(\ell(x^{(m)},y^{(m)},\theta+\Delta\theta)-\ell(x^{(m)},y^{(m)},\theta))]\\
+        &=\frac{1}{m}[\mathbb{E}(\ell(x^{(1)},y^{(1)},\theta+\Delta\theta)-\ell(x^{(1)},y^{(1)},\theta))+\dots\\&\qquad+\mathbb{E}(\ell(x^{(m)},y^{(m)},\theta+\Delta\theta)-\ell(x^{(m)},y^{(m)},\theta))]\\
+        &=\frac{1}{m}[m*\mathbb{E}(\ell(x,y,\theta+\Delta\theta)-\ell(x,y,\theta))]\\
+        &=\mathbb{E}(\ell(x,y,\theta+\Delta\theta)-\ell(x,y,\theta))\\
+        &=\mathbb{E}(\nabla\ell(x,y,\theta))\\
+        \nabla L(x,y,\theta)&=\nabla[\frac{1}{n}\sum_{i=1}^n\ell(x^{(i)},y^{(i)},\theta)]\\
+        &=\frac{1}{n}\sum_{i=1}^n\nabla\ell(x^{(i)},y^{(i)},\theta)\\
+        &=\mathbb{E}(\nabla\ell(x,y,\theta))
+    \end{align*}
+    \begin{equation*}
+        \therefore\mathbb{E}_\mathcal{I}[\nabla L_{\mathcal{I}}(x,y,\theta)]=\nabla L(x,y,\theta)
+    \end{equation*}
+\end{proof}
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
