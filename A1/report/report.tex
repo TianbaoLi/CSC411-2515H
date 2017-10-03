@@ -240,8 +240,33 @@ From the figure we can see that, loss value has the following tending:
 \begin{itemize}
 
     \item when $\tau \to 0$, loss value tends towards $+\infty$
-    \item when $\tau \to +\infty$, loss value tends towards $0$
+    \item when $\tau \to +\infty$, loss value tends towards a certain small value
 \end{itemize}
+
+\begin{proof}
+    \begin{align*}
+        a^{(i)}&=\frac{e^{-\frac{\|x-x^{(i)}\|^2}{2\tau^2}}}{\sum_je^{-\frac{\|x-x^{(j)}\|^2}{2\tau^2}}}\\
+        \frac{1}{a^{(i)}}&=\frac{\sum_je^{-\frac{\|x-x^{(j)}\|^2}{2\tau^2}}}{e^{-\frac{\|x-x^{(i)}\|^2}{2\tau^2}}}\\
+        &=1+\frac{\sum_{i\neq j}e^{-\frac{\|x-x^{(j)}\|^2}{2\tau^2}}}{e^{-\frac{\|x-x^{(i)}\|^2}{2\tau^2}}}\\
+        &=1+\sum_{i\neq j}\frac{e^{-\frac{\|x-x^{(j)}\|^2}{2\tau^2}}}{e^{-\frac{\|x-x^{(i)}\|^2}{2\tau^2}}}\\
+        &=1+\sum_{i\neq j}e^{\frac{\|x-x^{(i)}\|^2-\|x-x^{(j)}\|^2}{2\tau^2}}\\
+    \end{align*}
+    \begin{align*}
+        when\quad\tau&\to 0,\frac{1}{a^{(i)}}\to+\infty, a^{(i)}\to 0,A\to 0\\
+        when\quad\tau&\to +\infty,\frac{1}{a^{(i)}}\to1+\sum_{i\neq j}1=N, a^{(i)}\to\frac{1}{N},A\to \frac{1}{N}I\\
+    \end{align*}
+    \begin{align*}
+        \because w^*&=\frac{X^\mathrm{T}Ay}{X^\mathrm{T}AX+\lambda I}\\
+        \therefore loss&=(\hat{y}-y)^2\\
+        &=(X^\mathrm{T}w^*-y)^2\\
+        &=(\frac{X^\mathrm{T}AXy}{X^\mathrm{T}AX+\lambda I}-y)^2\\
+        &=(\frac{\lambda Iy}{X^\mathrm{T}AX+\lambda I})^2\\
+    \end{align*}
+    \begin{align*}
+        when\quad\tau&\to 0,A\to 0,loss\to 0\\
+        when\quad\tau&\to +\infty,A\to \frac{1}{N}I,loss\to (\frac{\lambda Iy}{\frac{1}{N}X^\mathrm{T}IX+\lambda I})^2=(\frac{N\lambda y}{X^\mathrm{T}X+\lambda })^2\\
+    \end{align*}
+\end{proof}
 
 \section{Q3: Mini-batch SGD gradient estimator}
 
