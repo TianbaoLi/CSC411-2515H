@@ -50,7 +50,7 @@ def run_on_fold(x_test, y_test, x_train, y_train, taus):
     for j,tau in enumerate(taus):
         predictions =  np.array([LRLS(x_test[i,:].reshape(d,1),x_train,y_train, tau) \
                         for i in range(N_test)])
-        losses[j] = ((predictions-y_test)**2).mean()
+        losses[j] = ((predictions.flatten()-y_test.flatten())**2).mean()
     return losses
  
  
