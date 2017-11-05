@@ -33,7 +33,6 @@ class KNearestNeighbor(object):
         assert test_point.shape[1] == self.train_data.shape[1]
 
         # Compute squared distance
-        train_norm = (self.train_data**2).sum(axis=1).reshape(-1,1)
         test_norm = (test_point**2).sum(axis=1).reshape(1,-1)
         dist = self.train_norm + test_norm - 2*self.train_data.dot(test_point.transpose())
         return np.squeeze(dist)
@@ -47,7 +46,14 @@ class KNearestNeighbor(object):
         digit = None
         return digit
 
-def cross_validation(knn, k_range=np.arange(1,15)):
+def cross_validation(train_data, train_labels, k_range=np.arange(1,16)):
+    '''
+    Perform 10-fold cross validation to find the best value for k
+
+    Note: Previously this function took knn as an argument instead of train_data,train_labels.
+    The intention was for students to take the training data from the knn object - this should be clearer
+    from the new function signature.
+    '''
     for k in k_range:
         # Loop over folds
         # Evaluate k-NN

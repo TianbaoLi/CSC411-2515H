@@ -32,7 +32,7 @@ def compute_sigma_mles(train_data, train_labels):
     return covariances
 
 def plot_cov_diagonal(covariances):
-    # Plot the diagonal of each covariance matrix side by side
+    # Plot the log-diagonal of each covariance matrix side by side
     for i in range(10):
         cov_diag = np.diag(covariances[i])
         # ...

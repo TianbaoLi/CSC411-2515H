@@ -1,6 +1,5 @@
 '''
 Question 2.0 Skeleton Code
-
 Here you should load the data and plot
 the means for each of the digit classes.
 '''
@@ -26,4 +25,4 @@ def plot_means(train_data, train_labels):
 
 if __name__ == '__main__':
     train_data, train_labels, _, _ = data.load_all_data_from_zip('a2digits.zip', 'data')
-    plot_means(train_data, train_labels)
+plot_means(train_data, train_labels)
