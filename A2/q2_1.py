@@ -44,6 +44,17 @@ class KNearestNeighbor(object):
         You should return the digit label provided by the algorithm
         '''
         digit = None
+        dist = self.l2_distance(test_point)
+
+        noTies = False
+        while noTies == False:
+            mink = np.argpartition(dist, k)[:k]
+            counts = np.bincount(self.train_labels[mink].astype(int))
+            digit = np.argwhere(counts == np.amax(counts))
+            if len(digit) > 1:
+                k = k - 1
+            else:
+                noTies = True
         return digit
 
 def cross_validation(train_data, train_labels, k_range=np.arange(1,16)):
@@ -54,6 +65,8 @@ def cross_validation(train_data, train_labels, k_range=np.arange(1,16)):
     The intention was for students to take the training data from the knn object - this should be clearer
     from the new function signature.
     '''
+    for i in range(15):
+        print i+1, classification_accuracy(knn, i+1, test_data, test_labels)
     for k in k_range:
         # Loop over folds
         # Evaluate k-NN
@@ -65,14 +78,22 @@ def classification_accuracy(knn, k, eval_data, eval_labels):
     Evaluate the classification accuracy of knn on the given 'eval_data'
     using the labels
     '''
-    pass
+    accuracy = 0.0
+    for i in range(len(eval_data)):
+        predicted_label = knn.query_knn(eval_data[i], k)
+        if predicted_label == int(eval_labels[i]):
+            accuracy = accuracy + 1
+    return accuracy / len(eval_data)
 
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
     knn = KNearestNeighbor(train_data, train_labels)
 
-    # Example usage:
-    predicted_label = knn.query_knn(test_data[0], 1)
+    # K = 1:
+    print "K = 1:", classification_accuracy(knn, 1, test_data, test_labels)
+    # K = 15:
+    print "K = 15:", classification_accuracy(knn, 15, test_data, test_labels)
+
 
 if __name__ == '__main__':
     main()
