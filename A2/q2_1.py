@@ -8,6 +8,7 @@ import data
 import numpy as np
 # Import pyplot - plt.imshow is useful!
 import matplotlib.pyplot as plt
+from sklearn.model_selection import KFold
 
 class KNearestNeighbor(object):
     '''
@@ -65,13 +66,24 @@ def cross_validation(train_data, train_labels, k_range=np.arange(1,16)):
     The intention was for students to take the training data from the knn object - this should be clearer
     from the new function signature.
     '''
-    for i in range(15):
-        print i+1, classification_accuracy(knn, i+1, test_data, test_labels)
+    FOLD = 10
+    cv_result = np.zeros(2 * k_range.max()).reshape(k_range.max(), 2)
     for k in k_range:
         # Loop over folds
         # Evaluate k-NN
         # ...
-        pass
+        kf = KFold(n_splits = FOLD)
+        kf.get_n_splits(train_data)
+        train_accuracy = 0.0
+        validation_accuracy = 0.0
+        for train_index, test_index in kf.split(train_data):
+            knn = KNearestNeighbor(train_data[train_index], train_labels[train_index])
+            train_accuracy = train_accuracy + classification_accuracy(knn, k, train_data[train_index], train_labels[train_index])
+            validation_accuracy = validation_accuracy + classification_accuracy(knn, k, train_data[test_index], train_labels[test_index])
+        cv_result[k - 1, 0] = train_accuracy / FOLD
+        cv_result[k - 1, 1] = validation_accuracy / FOLD
+
+    return cv_result
 
 def classification_accuracy(knn, k, eval_data, eval_labels):
     '''
@@ -90,10 +102,16 @@ def main():
     knn = KNearestNeighbor(train_data, train_labels)
 
     # K = 1:
-    print "K = 1:", classification_accuracy(knn, 1, test_data, test_labels)
+    print "K =  1:", classification_accuracy(knn, 1, test_data, test_labels)
     # K = 15:
     print "K = 15:", classification_accuracy(knn, 15, test_data, test_labels)
-
+    # K-fold cross validation
+    cv_result = cross_validation(train_data, train_labels)
+    print "Cross validation"
+    print cv_result
+    best_k = np.argmax(cv_result[:, 1])
+    print "Best K:", best_k + 1
+    print "Test error:",classification_accuracy(knn, best_k, test_data, test_labels)
 
 if __name__ == '__main__':
     main()
