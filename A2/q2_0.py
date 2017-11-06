@@ -25,4 +25,4 @@ def plot_means(train_data, train_labels):
 
 if __name__ == '__main__':
     train_data, train_labels, _, _ = data.load_all_data_from_zip('a2digits.zip', 'data')
-plot_means(train_data, train_labels)
+    plot_means(train_data, train_labels)
