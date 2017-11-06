@@ -68,20 +68,19 @@ def cross_validation(train_data, train_labels, k_range=np.arange(1,16)):
     '''
     FOLD = 10
     cv_result = np.zeros(2 * k_range.max()).reshape(k_range.max(), 2)
-    for k in k_range:
-        # Loop over folds
+
+    kf = KFold(n_splits=FOLD)
+    kf.get_n_splits(train_data)
+    train_accuracy = 0.0
+    validation_accuracy = 0.0
+
+    # Loop over folds
+    for train_index, test_index in kf.split(train_data):
+        knn = KNearestNeighbor(train_data[train_index], train_labels[train_index])
         # Evaluate k-NN
-        # ...
-        kf = KFold(n_splits = FOLD)
-        kf.get_n_splits(train_data)
-        train_accuracy = 0.0
-        validation_accuracy = 0.0
-        for train_index, test_index in kf.split(train_data):
-            knn = KNearestNeighbor(train_data[train_index], train_labels[train_index])
-            train_accuracy = train_accuracy + classification_accuracy(knn, k, train_data[train_index], train_labels[train_index])
-            validation_accuracy = validation_accuracy + classification_accuracy(knn, k, train_data[test_index], train_labels[test_index])
-        cv_result[k - 1, 0] = train_accuracy / FOLD
-        cv_result[k - 1, 1] = validation_accuracy / FOLD
+        for k in k_range:
+            cv_result[k - 1, 0] = cv_result[k - 1, 0] + classification_accuracy(knn, k, train_data[train_index], train_labels[train_index]) / FOLD
+            cv_result[k - 1, 1] = cv_result[k - 1, 1] + classification_accuracy(knn, k, train_data[test_index], train_labels[test_index]) / FOLD
 
     return cv_result
 
