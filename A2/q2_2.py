@@ -71,7 +71,7 @@ def generative_likelihood(digits, means, covariances):
     for n in range(N):
         for i in range(10):
             delta = (digits[n] - means[i]).reshape(64, -1)
-            gen_likelihood[n][i] = (-1.0 * d / 2 * np.log(2 * np.pi)) * (-1.0 / 2 * np.log(np.linalg.det(covariances[i]))) * (-1.0 / 2 * np.dot(np.dot(delta.T, np.linalg.inv(covariances[i])), delta))
+            gen_likelihood[n][i] = (-1.0 * d / 2 * np.log(2 * np.pi)) + (-1.0 / 2 * np.log(np.linalg.det(covariances[i]))) + (-1.0 / 2 * np.dot(np.dot(delta.T, np.linalg.inv(covariances[i])), delta))
     return gen_likelihood
 
 def conditional_likelihood(digits, means, covariances):
