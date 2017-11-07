@@ -18,6 +18,10 @@ def compute_mean_mles(train_data, train_labels):
     '''
     means = np.zeros((10, 64))
     # Compute means
+    for i in range(0, 10):
+        # Compute mean of class i
+        i_digits = data.get_digits_by_label(train_data, train_labels, i)
+        means[i] = np.mean(i_digits, axis = 0)
     return means
 
 def compute_sigma_mles(train_data, train_labels):
@@ -29,6 +33,13 @@ def compute_sigma_mles(train_data, train_labels):
     '''
     covariances = np.zeros((10, 64, 64))
     # Compute covariances
+    for i in range(0, 10):
+        i_digits = data.get_digits_by_label(train_data, train_labels, i)
+        i_digits = i_digits.T
+        Ei = np.mean(i_digits, axis = 1)
+        for j in range(64):
+            for k in range(64):
+                covariances[i][j][k] = np.dot((i_digits[j] - Ei[j]).T, (i_digits[k] - Ei[k])) / (i_digits.shape[1] - 1)
     return covariances
 
 def plot_cov_diagonal(covariances):
@@ -36,6 +47,10 @@ def plot_cov_diagonal(covariances):
     for i in range(10):
         cov_diag = np.diag(covariances[i])
         # ...
+
+    all_concat = np.concatenate(means, 1)
+    plt.imshow(all_concat, cmap='gray')
+    plt.show()
 
 def generative_likelihood(digits, means, covariances):
     '''
