@@ -21,7 +21,8 @@ def compute_mean_mles(train_data, train_labels):
     for i in range(0, 10):
         # Compute mean of class i
         i_digits = data.get_digits_by_label(train_data, train_labels, i)
-        means[i] = np.mean(i_digits, axis = 0)
+        for j in range(i_digits.shape[1]):
+            means[i][j] = np.sum(i_digits[:, j]) / i_digits.shape[0]
     return means
 
 def compute_sigma_mles(train_data, train_labels):
@@ -62,7 +63,14 @@ def generative_likelihood(digits, means, covariances):
 
     Should return an n x 10 numpy array 
     '''
-    return None
+    N = digits.shape[0]
+    d = digits.shape[1]
+    gen_likelihood = np.zeros(N, 10)
+
+    for n in range(N):
+        for i in range(10):
+            gen_likelihood[n][i] = -(1.0 * d / 2 * np.log(2 * np.pi)) * (1 / 2 * np.log(np.linalg.det(covariances[i]))) * (-1.0 / 2 * np.cov(np.cov((digits[n] - means[i]).T, np.linalg.inv(covariances[i]))), (digits[n] - means[i]))
+    return gen_likelihood
 
 def conditional_likelihood(digits, means, covariances):
     '''
@@ -73,7 +81,18 @@ def conditional_likelihood(digits, means, covariances):
     This should be a numpy array of shape (n, 10)
     Where n is the number of datapoints and 10 corresponds to each digit class
     '''
-    return None
+    N = digits.shape[0]
+    con_likelihood = np.zeros(N, 10)
+    likelihood = generative_likelihood(digits, means, covariances)
+
+    for n in range(N):
+        total_probability = 0.0
+        for i in range(10):
+            total_probability = total_probability + likelihood[n][i]
+        for i in range(10):
+            con_likelihood[n][i] = likelihood[n][i] * (1.0 / 10) / total_probability
+
+    return con_likelihood
 
 def avg_conditional_likelihood(digits, labels, means, covariances):
     '''
@@ -83,10 +102,20 @@ def avg_conditional_likelihood(digits, labels, means, covariances):
 
     i.e. the average log likelihood that the model assigns to the correct class label
     '''
-    cond_likelihood = conditional_likelihood(digits, means, covariances)
-
     # Compute as described above and return
-    return None
+    avg = np.zeros(10)
+    true_label_count = np.zeros(10)
+    N = digits.shape[0]
+    cond_likelihood = conditional_likelihood(digits, means, covariances)
+    for n in range(N):
+        true_label = labels[n]
+        true_label_count[true_label] = true_label_count[true_label] + 1
+        avg[true_label] = avg[true_label] + cond_likelihood[n][true_label]
+
+    for i in range(10):
+        avg[i] = avg[i] / true_label_count[i]
+
+    return cond_likelihood
 
 def classify_data(digits, means, covariances):
     '''
@@ -105,6 +134,7 @@ def main():
     plot_cov_diagonal(covariances)
 
     # Evaluation
+    print avg_conditional_likelihood(train_data, train_labels, means, covariances)
 
 if __name__ == '__main__':
     main()
