@@ -17,7 +17,7 @@ def plot_means(train_data, train_labels):
         means.append([])
         for j in range(len(i_digits[0])):
             means[i].append(np.mean(i_digits[:, j]))
-        means[i] = np.array(means[i]).reshape((8, 8))
+        means[i] = np.array(means[i]).reshape(8, 8)
     # Plot all means on same axis/';
     all_concat = np.concatenate(means, 1)
     plt.imshow(all_concat, cmap='gray')
