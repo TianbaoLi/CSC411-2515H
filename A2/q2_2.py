@@ -44,11 +44,13 @@ def compute_sigma_mles(train_data, train_labels):
 
 def plot_cov_diagonal(covariances):
     # Plot the log-diagonal of each covariance matrix side by side
+    log_diagonals = np.zeros((10, 8, 8))
     for i in range(10):
         cov_diag = np.diag(covariances[i])
         # ...
+        log_diagonals[i] = np.log(cov_diag).reshape(8, 8)
 
-    all_concat = np.concatenate(means, 1)
+    all_concat = np.concatenate(log_diagonals, 1)
     plt.imshow(all_concat, cmap='gray')
     plt.show()
 
@@ -99,6 +101,7 @@ def main():
     # Fit the model
     means = compute_mean_mles(train_data, train_labels)
     covariances = compute_sigma_mles(train_data, train_labels)
+    plot_cov_diagonal(covariances)
 
     # Evaluation
 
