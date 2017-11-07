@@ -32,11 +32,12 @@ def compute_sigma_mles(train_data, train_labels):
     consisting of a covariance matrix for each digit class 
     '''
     covariances = np.zeros((10, 64, 64))
+    means = compute_mean_mles(train_data, train_labels)
     # Compute covariances
     for i in range(0, 10):
         i_digits = data.get_digits_by_label(train_data, train_labels, i)
         i_digits = i_digits.T
-        Ei = np.mean(i_digits, axis = 1)
+        Ei = means[i]
         for j in range(64):
             for k in range(64):
                 covariances[i][j][k] = np.dot((i_digits[j] - Ei[j]).T, (i_digits[k] - Ei[k])) / (i_digits.shape[1] - 1)
