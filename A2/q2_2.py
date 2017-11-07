@@ -42,6 +42,7 @@ def compute_sigma_mles(train_data, train_labels):
         for j in range(64):
             for k in range(64):
                 covariances[i][j][k] = np.dot((i_digits[j] - Ei[j]).T, (i_digits[k] - Ei[k])) / (i_digits.shape[1] - 1)
+    covariances = covariances + np.diag(np.ones((64, 64)) * 0.01)
     return covariances
 
 def plot_cov_diagonal(covariances):
@@ -65,11 +66,12 @@ def generative_likelihood(digits, means, covariances):
     '''
     N = digits.shape[0]
     d = digits.shape[1]
-    gen_likelihood = np.zeros(N, 10)
+    gen_likelihood = np.zeros((N, 10))
 
     for n in range(N):
         for i in range(10):
-            gen_likelihood[n][i] = -(1.0 * d / 2 * np.log(2 * np.pi)) * (1 / 2 * np.log(np.linalg.det(covariances[i]))) * (-1.0 / 2 * np.cov(np.cov((digits[n] - means[i]).T, np.linalg.inv(covariances[i]))), (digits[n] - means[i]))
+            delta = (digits[n] - means[i]).reshape(64, -1)
+            gen_likelihood[n][i] = (-1.0 * d / 2 * np.log(2 * np.pi)) * (-1.0 / 2 * np.log(np.linalg.det(covariances[i]))) * (-1.0 / 2 * np.dot(np.dot(delta.T, np.linalg.inv(covariances[i])), delta))
     return gen_likelihood
 
 def conditional_likelihood(digits, means, covariances):
@@ -82,7 +84,7 @@ def conditional_likelihood(digits, means, covariances):
     Where n is the number of datapoints and 10 corresponds to each digit class
     '''
     N = digits.shape[0]
-    con_likelihood = np.zeros(N, 10)
+    con_likelihood = np.zeros((N, 10))
     likelihood = generative_likelihood(digits, means, covariances)
 
     for n in range(N):
@@ -108,33 +110,61 @@ def avg_conditional_likelihood(digits, labels, means, covariances):
     N = digits.shape[0]
     cond_likelihood = conditional_likelihood(digits, means, covariances)
     for n in range(N):
-        true_label = labels[n]
+        true_label = int(labels[n])
         true_label_count[true_label] = true_label_count[true_label] + 1
         avg[true_label] = avg[true_label] + cond_likelihood[n][true_label]
 
     for i in range(10):
         avg[i] = avg[i] / true_label_count[i]
 
-    return cond_likelihood
+    return avg
 
 def classify_data(digits, means, covariances):
     '''
     Classify new points by taking the most likely posterior class
     '''
+    N = digits.shape[0]
+    prediction = np.zeros((N))
     cond_likelihood = conditional_likelihood(digits, means, covariances)
     # Compute and return the most likely class
-    pass
+    for n in range(N):
+        prediction[n] = np.argmax(cond_likelihood[n])
+
+    return prediction
+
+def Evaluate(digits, labels, means, covariances):
+    N = digits.shape[0]
+    fit_count = 0
+    prediction = classify_data(digits, means, covariances)
+    for n in range(N):
+        print prediction[n], labels[n]
+        if int(prediction[n]) == int(labels[n]):
+            fit_count = fit_count + 1
+    return 1.0 * fit_count / N
 
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
 
     # Fit the model
-    means = compute_mean_mles(train_data, train_labels)
-    covariances = compute_sigma_mles(train_data, train_labels)
-    plot_cov_diagonal(covariances)
+    train_means = compute_mean_mles(train_data, train_labels)
+    train_covariances = compute_sigma_mles(train_data, train_labels)
+    plot_cov_diagonal(train_covariances)
+
+    test_means = compute_mean_mles(test_data, test_labels)
+    test_covariances = compute_sigma_mles(test_data, test_labels)
+
+    train_avg = avg_conditional_likelihood(train_data, train_labels, train_means, train_covariances)
+    print "Training data avg conditional likelihood:", train_avg
+
+    test_avg = avg_conditional_likelihood(test_data, test_labels, test_means, test_covariances)
+    print "Test data avg conditional likelihood:", test_avg
 
     # Evaluation
-    print avg_conditional_likelihood(train_data, train_labels, means, covariances)
+    train_accuracy = Evaluate(train_data, train_labels, train_means, train_covariances)
+    print "Training accuracy:", train_accuracy
+
+    test_accuracy = Evaluate(test_data, test_labels, test_means, test_covariances)
+    print "Test accuracy:", test_accuracy
 
 if __name__ == '__main__':
     main()
