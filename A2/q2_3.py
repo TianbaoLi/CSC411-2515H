@@ -33,6 +33,10 @@ def plot_images(class_images):
         img_i = class_images[i]
         # ...
 
+    all_concat = np.concatenate(means, 1)
+    plt.imshow(all_concat, cmap='gray')
+    plt.show()
+
 def generate_new_data(eta):
     '''
     Sample a new data point from your generative distribution p(x|y,theta) for
@@ -87,6 +91,7 @@ def classify_data(bin_digits, eta):
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
     train_data, test_data = binarize_data(train_data), binarize_data(test_data)
+
 
     # Fit the model
     eta = compute_parameters(train_data, train_labels)
