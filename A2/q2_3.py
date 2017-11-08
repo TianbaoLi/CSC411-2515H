@@ -54,7 +54,14 @@ def generate_new_data(eta):
 
     Plot these values
     '''
+    K = eta.shape[0]
+    d = eta.shape[1]
     generated_data = np.zeros((10, 64))
+
+    for k in range(K):
+        for j in range(d):
+            generated_data[k][j] = eta[k][j] * (1 - eta[k][j])
+
     plot_images(generated_data)
 
 def generative_likelihood(bin_digits, eta):
