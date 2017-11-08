@@ -139,6 +139,18 @@ def Evaluate(digits, labels, means, covariances):
             fit_count = fit_count + 1
     return 1.0 * fit_count / N
 
+def plot_cov_eigenvectors(covariances):
+    # Plot the leading eigenvectors of each covariance matrix side by side
+    eigenvectors = np.zeros((10, 8, 8))
+    for i in range(10):
+        evalue, evector = np.linalg.eig(covariances[i])
+        leading_index = np.argmax(evalue)
+        eigenvectors[i] = evector[:,leading_index].reshape(8, 8)
+
+    all_concat = np.concatenate(eigenvectors, 1)
+    plt.imshow(all_concat, cmap='gray')
+    plt.show()
+
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
 
@@ -146,6 +158,7 @@ def main():
     means = compute_mean_mles(train_data, train_labels)
     covariances = compute_sigma_mles(train_data, train_labels)
     plot_cov_diagonal(covariances)
+    plot_cov_eigenvectors(covariances)
 
     train_avg = avg_conditional_likelihood(train_data, train_labels, means, covariances)
     print "Training data avg conditional likelihood:", train_avg
