@@ -60,7 +60,7 @@ def generate_new_data(eta):
 
     for k in range(K):
         for j in range(d):
-            generated_data[k][j] = eta[k][j] * (1 - eta[k][j])
+            generated_data[k][j] = np.random.binomial(1, eta[k][j])
 
     plot_images(generated_data)
 
