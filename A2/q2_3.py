@@ -71,7 +71,17 @@ def generative_likelihood(bin_digits, eta):
 
     Should return an n x 10 numpy array 
     '''
-    return None
+    N = bin_digits.shape[0]
+    d = bin_digits.shape[1]
+    gen_likelihood = np.zeros((N, 10))
+
+    for n in range(N):
+        for k in range(10):
+            gen_likelihood[n][k] = 1.0
+            for j in range(64):
+                gen_likelihood[n][k] = gen_likelihood[n][k] * np.power(eta[k][j], bin_digits[n][j]) * np.power(1 - eta[k][j], 1 - bin_digits[n][j])
+            gen_likelihood[n][k] = np.log(gen_likelihood[n][k])
+    return gen_likelihood
 
 def conditional_likelihood(bin_digits, eta):
     '''
@@ -82,7 +92,16 @@ def conditional_likelihood(bin_digits, eta):
     This should be a numpy array of shape (n, 10)
     Where n is the number of datapoints and 10 corresponds to each digit class
     '''
-    return None
+    N = bin_digits.shape[0]
+    con_likelihood = np.zeros((N, 10))
+    likelihood = generative_likelihood(bin_digits, eta)
+
+    for n in range(N):
+        total_probability = np.log(np.sum(np.exp(likelihood[n][:])))
+        for k in range(10):
+            con_likelihood[n][k] = likelihood[n][k] + np.log(1.0 / 10) - total_probability
+
+    return con_likelihood
 
 def avg_conditional_likelihood(bin_digits, labels, eta):
     '''
@@ -92,18 +111,34 @@ def avg_conditional_likelihood(bin_digits, labels, eta):
 
     i.e. the average log likelihood that the model assigns to the correct class label
     '''
+    avg = np.zeros(10)
+    true_label_count = np.zeros(10)
+    N = bin_digits.shape[0]
     cond_likelihood = conditional_likelihood(bin_digits, eta)
 
     # Compute as described above and return
-    return None
+    for n in range(N):
+        true_label = int(labels[n])
+        true_label_count[true_label] = true_label_count[true_label] + 1
+        avg[true_label] = avg[true_label] + cond_likelihood[n][true_label]
+
+    for i in range(10):
+        avg[i] = avg[i] / true_label_count[i]
+
+    return avg
 
 def classify_data(bin_digits, eta):
     '''
     Classify new points by taking the most likely posterior class
     '''
+    N = bin_digits.shape[0]
+    prediction = np.zeros((N))
     cond_likelihood = conditional_likelihood(bin_digits, eta)
     # Compute and return the most likely class
-    pass
+    for n in range(N):
+        prediction[n] = np.argmax(cond_likelihood[n][:])
+
+    return prediction
 
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
@@ -114,8 +149,13 @@ def main():
 
     # Evaluation
     plot_images(eta)
-
     generate_new_data(eta)
+
+    train_avg = avg_conditional_likelihood(train_data, train_labels, eta)
+    print "Training data avg conditional likelihood:", train_avg
+
+    test_avg = avg_conditional_likelihood(test_data, test_labels, eta)
+    print "Test data avg conditional likelihood:", test_avg
 
 if __name__ == '__main__':
     main()
