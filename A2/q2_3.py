@@ -23,17 +23,27 @@ def compute_parameters(train_data, train_labels):
     where the ith row corresponds to the ith digit class.
     '''
     eta = np.zeros((10, 64))
+    K = eta.shape[0]
+    d = eta.shape[1]
+
+    for k in range(K):
+        k_index = np.argwhere(train_labels == k)
+        k_digits = train_data[k_index].reshape(-1, d)
+        for j in range(d):
+            eta[k][j] = (np.sum(k_digits[:, j]) + 1.0) / (k_digits.shape[0] + 2.0)
+
     return eta
 
 def plot_images(class_images):
     '''
     Plot each of the images corresponding to each class side by side in grayscale
     '''
+    parameters = np.zeros((10, 8, 8))
     for i in range(10):
         img_i = class_images[i]
         # ...
-
-    all_concat = np.concatenate(means, 1)
+        parameters[i] = img_i.reshape(8, 8)
+    all_concat = np.concatenate(parameters, 1)
     plt.imshow(all_concat, cmap='gray')
     plt.show()
 
@@ -91,7 +101,6 @@ def classify_data(bin_digits, eta):
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
     train_data, test_data = binarize_data(train_data), binarize_data(test_data)
-
 
     # Fit the model
     eta = compute_parameters(train_data, train_labels)
