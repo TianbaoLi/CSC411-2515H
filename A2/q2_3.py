@@ -140,6 +140,15 @@ def classify_data(bin_digits, eta):
 
     return prediction
 
+def Evaluate(bin_digits, labels, eta):
+    N = bin_digits.shape[0]
+    fit_count = 0
+    prediction = classify_data(bin_digits, eta)
+    for n in range(N):
+        if int(prediction[n]) == int(labels[n]):
+            fit_count = fit_count + 1
+    return 1.0 * fit_count / N
+
 def main():
     train_data, train_labels, test_data, test_labels = data.load_all_data('data')
     train_data, test_data = binarize_data(train_data), binarize_data(test_data)
@@ -156,6 +165,12 @@ def main():
 
     test_avg = avg_conditional_likelihood(test_data, test_labels, eta)
     print "Test data avg conditional likelihood:", test_avg
+
+    train_accuracy = Evaluate(train_data, train_labels, eta)
+    print "Training accuracy:", train_accuracy
+
+    test_accuracy = Evaluate(test_data, test_labels, eta)
+    print "Test accuracy:", test_accuracy
 
 if __name__ == '__main__':
     main()
