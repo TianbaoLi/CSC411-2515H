@@ -18,16 +18,34 @@
 
 \maketitle
 
+\section{Q1: Class-conditional gaussians}
+
+Given:
+
+\begin{equation}
+    p(y=k)=a_k
+\end{equation}
+
+\begin{equation}
+    p(\mathbf{x}|y=k,\mu,\sigma)=(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ki})^2\}
+\end{equation}
+
+\subsection{Bayes' rule derivation}
+
+\begin{align*}
+    p(y=k|\mathbf{x},\mu,\sigma)&=\frac{p(\mathbf{x}|y=k,\mu,\sigma)p(y=k)}{p(\mathbf{x}|\mu,\sigma)}\\
+    &=\frac{p(\mathbf{x}|y=k,\mu,\sigma)p(y=k)}{\sum^K_{j=1}p(\mathbf{x}|y=j,\mu,\sigma)}\\
+    &=\frac{(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ki})^2\}a_k}{\sum^K_{j=1}(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ji})^2\}}
+\end{align*}
+
+
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}
 
 
-
-
 In this assignemnt, we use the dataset of \href{http://lib.stat.cmu.edu/datasets/boston}{Boston Housing data}.
 
-\section{Q1: Leanring basics of regressoion in Python}
 
 \subsection{Data loading}
 
