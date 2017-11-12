@@ -13,3 +13,10 @@
 \BOOKMARK [3][-]{subsubsection.2.2.2}{Average conditional log-likelihood}{subsection.2.2}% 13
 \BOOKMARK [3][-]{subsubsection.2.2.3}{Accuracy}{subsection.2.2}% 14
 \BOOKMARK [3][-]{subsubsection.2.2.4}{Leading eigenvectors}{subsection.2.2}% 15
+\BOOKMARK [2][-]{subsection.2.3}{Naive bayes classifier training}{section.2}% 16
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Convert to binart features}{subsection.2.3}% 17
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Model fitting}{subsection.2.3}% 18
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Plot }{subsection.2.3}% 19
+\BOOKMARK [3][-]{subsubsection.2.3.4}{Sample new data}{subsection.2.3}% 20
+\BOOKMARK [3][-]{subsubsection.2.3.5}{Average conditional log-likelihood}{subsection.2.3}% 21
+\BOOKMARK [3][-]{subsubsection.2.3.6}{Accuracy}{subsection.2.3}% 22
