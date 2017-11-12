@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex report"] 1510461396 "report.aux" "report.bbl" "report" 1510461396
+["bibtex report"] 1510462322 "report.aux" "report.bbl" "report" 1510462322
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/base/plain.bst" 1480098433 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
   "bibliography.bib" 0 -1 0 ""
-  "report.aux" 1510461368 4125 0f3be147750108cb795e0d8c0defbc1c ""
+  "report.aux" 1510462322 4224 6b9256fb8ee44b9b0b674ba0faae1700 ""
   (generated)
-  "report.blg"
   "report.bbl"
-["pdflatex"] 1510461367 "report.tex" "report.pdf" "report" 1510461396
+  "report.blg"
+["pdflatex"] 1510462322 "report.tex" "report.pdf" "report" 1510462322
   "/home/tianbao/.texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1510453778 6964 77aaeec99359d2f44405401e1528d0b6 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -167,12 +167,12 @@
   "New_data.png" 1510460826 1971 96ecdf8358b9823837700a7f234af821 ""
   "Plot_eta.png" 1510460580 3194 e2defffb2ed9f13e59645e4edef043ba ""
   "Trainging_data_mean.png" 1510455896 3237 4d48756b838f5377090ae7807b872d29 ""
-  "report.aux" 1510461368 4125 0f3be147750108cb795e0d8c0defbc1c ""
+  "report.aux" 1510462322 4224 6b9256fb8ee44b9b0b674ba0faae1700 ""
   "report.bbl" 0 -1 0 "bibtex report"
-  "report.out" 1510461368 1659 5242b5a0217b00a177af2b05a3a6ba5a ""
-  "report.tex" 1510461396 8972 592841a683e065a4a2178ca40a21d486 ""
+  "report.out" 1510462322 1725 de2177ed291c044cd76ce29e43ae72c9 ""
+  "report.tex" 1510462322 9995 26ad650b727a4f3f2dd4c1d1c2210dc9 ""
   (generated)
-  "report.pdf"
   "report.log"
+  "report.pdf"
   "report.aux"
   "report.out"

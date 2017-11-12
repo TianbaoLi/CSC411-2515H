@@ -13,7 +13,7 @@
 
 \title{CSC411 Fall 2017\\Assignment 2 Report}
 \author{Tianbao Li}
-\date{2017/11/04}
+\date{2017/11/11}
 
 \begin{document}
 
@@ -197,7 +197,7 @@ def compute_parameters(train_data, train_labels):
         k_index = np.argwhere(train_labels == k)
         k_digits = train_data[k_index].reshape(-1, d)
         for j in range(d):
-            eta[k][j] = (np.sum(k_digits[:, j]) + 1.0)\\
+            eta[k][j] = (np.sum(k_digits[:, j]) + 1.0)\
                         / (k_digits.shape[0] + 2.0)
     return eta
 \end{lstlisting}
@@ -242,6 +242,17 @@ By selecting the most likely posterior class for each datapoint as prediction, t
     \item training accuracy: 0.774142857143
     \item test accuracy: 0.76425
 \end{itemize}
+
+\subsection{Model comparison}
+
+For the handwritten digit classification problem, we use models of KNN, conditional Gaussian and naive Bayes. Analyzing from the accuracy, KNN and conditional Gaussian works better, while Naive Bayes performes badly.
+
+\begin{itemize}
+    \item KNN: Due to the relatively distinct classification among digits, decision boundaries are clear in some ways. So it is easy for KNN classifier to find the right group.
+    \item conditional Gaussian: Because the pattern for each class seems fixed, so data points for a certain class gather around the mean. Such structure can be easily caught by Gaussian.
+    \item naive Bayes: Naive Bayes has the assumption that all features should be i.i.d given a data point. However, as we can see from the figures that each feature corresponds to a pixel in the figure. For a digit, pixel connects with each other and form the shape of the digit. So the features here are not i.i.d. Naive Bayes could not work well upon obeying the assumption.
+\end{itemize}
+
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
