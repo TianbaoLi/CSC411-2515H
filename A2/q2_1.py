@@ -101,16 +101,17 @@ def main():
     knn = KNearestNeighbor(train_data, train_labels)
 
     # K = 1:
-    print "K =  1:", classification_accuracy(knn, 1, test_data, test_labels)
+    print "K =  1:", classification_accuracy(knn, 1, train_data, train_labels), classification_accuracy(knn, 1, test_data, test_labels)
     # K = 15:
-    print "K = 15:", classification_accuracy(knn, 15, test_data, test_labels)
+    print "K = 15:", classification_accuracy(knn, 15, train_data, train_labels), classification_accuracy(knn, 15, test_data, test_labels)
     # K-fold cross validation
     cv_result = cross_validation(train_data, train_labels)
     print "Cross validation"
     print cv_result
     best_k = np.argmax(cv_result[:, 1])
     print "Best K:", best_k + 1
-    print "Test error:",classification_accuracy(knn, best_k, test_data, test_labels)
+    print "Train accuracy:", classification_accuracy(knn, best_k, train_data, train_labels)
+    print "Test accuracy:",classification_accuracy(knn, best_k, test_data, test_labels)
 
 if __name__ == '__main__':
     main()
