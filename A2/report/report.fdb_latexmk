@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex report"] 1510454660 "report.aux" "report.bbl" "report" 1510454660
+["bibtex report"] 1510458430 "report.aux" "report.bbl" "report" 1510458431
   "/usr/local/texlive/2017/texmf-dist/bibtex/bst/base/plain.bst" 1480098433 20613 bd3fbfa9f64872b81ac57a0dd2ed855f ""
   "bibliography.bib" 0 -1 0 ""
-  "report.aux" 1510454660 1227 e49e66efe05b2e8e7f9ea399079d3d15 ""
+  "report.aux" 1510458431 1940 e5b4ab555b6e3767fe33625a93dcb7a4 ""
   (generated)
-  "report.bbl"
   "report.blg"
-["pdflatex"] 1510454660 "report.tex" "report.pdf" "report" 1510454660
+  "report.bbl"
+["pdflatex"] 1510458430 "report.tex" "report.pdf" "report" 1510458431
   "/home/tianbao/.texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk" 1510453778 6964 77aaeec99359d2f44405401e1528d0b6 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -114,6 +114,8 @@
   "/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amsopn.sty" 1480098820 4115 318a66090112f3aa3f415aeb6fe8540f ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/amsmath/amstext.sty" 1480098820 2431 fe3078ec12fc30287f568596f8e0b948 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls" 1480098821 19821 310da678527a7dfe2a02c88af38079b7 ""
+  "/usr/local/texlive/2017/texmf-dist/tex/latex/base/omlcmr.fd" 1480098821 2257 15f13452fccbf1841cc4a62831b0d32a ""
+  "/usr/local/texlive/2017/texmf-dist/tex/latex/base/omscmr.fd" 1480098821 2256 80ce1168fb4ce6a85583a9cf8972c013 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/base/size10.clo" 1480098821 8292 e897c12e1e886ce77fe26afc5d470886 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/bbm-macros/bbm.sty" 1480098821 1644 1e0d54b051369c3f457872824cac219f ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/bbm-macros/ubbm.fd" 1480098821 2132 62f898e14cad3357133b5cbf57b61c0a ""
@@ -132,6 +134,7 @@
   "/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg" 1480098833 235 6031e5765137be07eed51a510b2b8fb7 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.cfg" 1480098833 1827 d72ad54409ca5c1068a1939c63441bd2 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/listings/listings.sty" 1480098833 80336 ff90c926c3d7bfdaa3d80ca57123b0bb ""
+  "/usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstlang1.sty" 1480098833 93445 48e5be20ba2d0a2ca5c4ce7e292a4bbc ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstmisc.sty" 1480098833 77028 c3eb00afb55a32bc13ca8da7f5234377 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/ms/everyshi.sty" 1480098835 3878 6aa7c08ff2621006e0603349e40a30a8 ""
   "/usr/local/texlive/2017/texmf-dist/tex/latex/oberdiek/auxhook.sty" 1480098836 3834 4363110eb0ef1eb2b71c8fcbcdb6c357 ""
@@ -157,12 +160,13 @@
   "/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1506351677 2413399 a34414952447e5770f00490a7226a53e ""
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1506351701 4130359 98a892baff85034bca352bb12374bc17 ""
   "/usr/local/texlive/2017/texmf.cnf" 1506351666 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
-  "report.aux" 1510454660 1227 e49e66efe05b2e8e7f9ea399079d3d15 ""
+  "Trainging_data_mean.png" 1510455896 3237 4d48756b838f5377090ae7807b872d29 ""
+  "report.aux" 1510458431 1940 e5b4ab555b6e3767fe33625a93dcb7a4 ""
   "report.bbl" 0 -1 0 "bibtex report"
-  "report.out" 1510454660 349 6d0892334d652661844e663f760de5a0 ""
-  "report.tex" 1510454660 16368 662c7305afd2da6993b7addb5006f662 ""
+  "report.out" 1510458431 706 bed8cdda3942cc404c053445f952907b ""
+  "report.tex" 1510458430 18579 fa42e2928f04f39393cdf0544d41ce2e ""
   (generated)
-  "report.aux"
-  "report.log"
   "report.pdf"
+  "report.log"
+  "report.aux"
   "report.out"

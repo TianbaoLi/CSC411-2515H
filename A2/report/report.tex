@@ -69,7 +69,67 @@ Given:
     \Rightarrow\sigma_i&=\sqrt[4]{\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*(x^{(n)}_i-\mu_{ki})^2}{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*4\pi}}
 \end{align*}
 
+\section{Handwritten digit classification}
 
+In this assignemnt, we use the dataset of handwritten digit. To get a macro view of the data, here we plot the means for each data classes in the training set, shown in Figure~\ref{fig: Trainging_data_mean}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Trainging_data_mean}
+\caption{Mean for each class}
+\label{fig: Trainging_data_mean}
+\end{figure}
+
+\subsection{K-NN classifier}
+
+Fisrt, we build a K nearest neighbor classifier using Euclidean distance on the data.
+
+\subsubsection{Accuracy for certain K values}
+
+\begin{itemize}
+    \item for K = 1
+    \begin{itemize}
+        \item train classification accuracy: 1.0
+        \item test classification accuracy: 0.96875
+    \end{itemize}
+    \item for K = 15
+    \begin{itemize}
+        \item train classification accuracy: 0.961
+        \item test classification accuracy: 0.959
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Ties solution}
+
+During the implementation, one important problem is that ties usually happens and need to be broken. The solution is shown as follows.
+
+\begin{lstlisting}[language = Python]
+    def query_knn(self, test_point, k):
+        digit = None
+        dist = self.l2_distance(test_point)
+        noTies = False
+        while noTies == False:
+            mink = np.argpartition(dist, k)[:k]
+            counts = np.bincount(self.train_labels[mink].astype(int))
+            digit = np.argwhere(counts == np.amax(counts))
+            if len(digit) > 1:
+                k = k - 1
+            else:
+                noTies = True
+        return digit
+\end{lstlisting}
+
+While running KNN, if ties happen (which means two classes has the same maximum count), we try to decrease k by 1 and run the KNN again until no ties. As the class label should focus on one or a few classes, ties are unlikely to happen when $K=1$, so this should be a solution to get an answer without ties.
+
+\subsubsection{Best k}
+
+Here we implement 10 fold cross validation in range 1-15 to find the optimal K. By finding minimun validation error, optimal K for this problem is that $K=3$ and accuracies are shown as follows.
+
+\begin{itemize}
+    \item train classification accuracy: 1.0
+    \item valiadation classification accuracy: 0.96514286
+    \item test classification accuracy: 0.96875
+\end{itemize}
 
 
 \bibliographystyle{plain}
@@ -77,7 +137,7 @@ Given:
 \end{document}
 
 
-In this assignemnt, we use the dataset of \href{http://lib.stat.cmu.edu/datasets/boston}{Boston Housing data}.
+
 
 
 \subsection{Data loading}
