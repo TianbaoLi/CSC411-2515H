@@ -42,8 +42,12 @@ Given:
 
 \begin{align*}
     \ell(\theta;D)&=-\log p(y^{(1)},\mathbf{x}^{(1)},y^{(2)},\mathbf{x}^{(2)},\dots,y^{(N)},\mathbf{x}^{(N)}|\theta)\\
-    &=-\log(\prod^N_{n=1}p(\mathbf{x}|y=k,\theta)p(y=k))\\
-    &=-\sum^N_{n=1}log((\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ki})^2\}a_k)
+    &=-\log\prod^N_{n=1}p(y^{(n)},x^{(n)}|\theta)\\
+    &=-\sum^N_{n=1}(\log p(x^{(n)}|y^{(n)},
+    \theta)+\log p(y^{(n)}|\theta))\\
+    &=-\sum^N_{n=1}(\log((\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i^{(n)}-\mu_{ki})^2\})+\log\alpha_k)\\
+    &=-\sum^N_{n=1}(-\frac{1}{2}\sum^d_{i=1}2\pi\sigma^2_i-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2+\log\alpha_k)\\
+    &=\sum^N_{n=1}(\sum^d_{i=1}\pi\sigma^2_i+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2-\log\alpha_k)
 \end{align*}
 
 \bibliographystyle{plain}
