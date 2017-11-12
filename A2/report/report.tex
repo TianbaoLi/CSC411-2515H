@@ -131,12 +131,54 @@ Here we implement 10 fold cross validation in range 1-15 to find the optimal K. 
     \item test classification accuracy: 0.96875
 \end{itemize}
 
+\subsection{Conditional gaussian classifier training}
+
+\subsubsection{Diagonal covariance}
+
+The diagonal elements of each covariance matrix $\Sigma_k$ can be plotted as Figure~\ref{fig: Diagomal_covariance}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Diagomal_covariance}
+\caption{Diagonal elements of covariance for each class}
+\label{fig: Diagomal_covariance}
+\end{figure}
+
+\subsubsection{Average conditional log-likelihood}
+
+The average conditional log-likelihood for each class is shown as follows.
+
+\begin{itemize}
+    \item training data avg conditional likelihood: [-2.78902836 -2.48009327 -2.46864922 -2.53467722 -2.49894322 -2.93938866
+ -2.4646036  -3.70354979 -2.47281232 -2.74221317]
+    \item test data avg conditional likelihood: [-3.22599621 -4.13098548 -2.44591828 -3.1675836  -2.65604537 -3.69867522
+ -3.67902811 -7.62636215 -2.81381993 -3.95651773]
+\end{itemize}
+
+\subsubsection{Accuracy}
+
+By selecting the most likely posterior class for each datapoint as prediction, the accuracy is shown as follows.
+
+\begin{itemize}
+    \item training accuracy: 0.981285714286
+    \item test accuracy: 0.9605
+\end{itemize}
+
+\subsubsection{Leading eigenvectors}
+
+The leading eigenvectors of each covariance matrix $\Sigma_k$ can be plotted as Figure~\ref{fig: Leading_eigenvectors}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Leading_eigenvectors}
+\caption{Leading eigenvectors of covariance for each class}
+\label{fig: Leading_eigenvectors}
+\end{figure}
+
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}
-
-
 
 
 

@@ -13,7 +13,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/A2$q2_3.coverage" NAME="q2_3 Coverage Results" MODIFIED="1510178912453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/A2$q2_1.coverage" NAME="q2_1 Coverage Results" MODIFIED="1510457539570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/A2$q2_2.coverage" NAME="q2_2 Coverage Results" MODIFIED="1510178290499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/A2$q2_2.coverage" NAME="q2_2 Coverage Results" MODIFIED="1510458792867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/A2$q2_0.coverage" NAME="q2_0 Coverage Results" MODIFIED="1510455277496" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
@@ -30,7 +30,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="q2_1.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="q2_1.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/q2_1.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="461">
@@ -40,7 +40,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="q2_2.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="q2_2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/q2_2.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="18">
@@ -131,7 +131,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.q2_1">
+  <component name="RunManager" selected="Python.q2_2">
     <configuration name="q2_0" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -212,10 +212,10 @@
     </list>
     <recent_temporary>
       <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Python.q2_1" />
-        <item index="1" class="java.lang.String" itemvalue="Python.q2_0" />
-        <item index="2" class="java.lang.String" itemvalue="Python.q2_3" />
-        <item index="3" class="java.lang.String" itemvalue="Python.q2_2" />
+        <item index="0" class="java.lang.String" itemvalue="Python.q2_2" />
+        <item index="1" class="java.lang.String" itemvalue="Python.q2_1" />
+        <item index="2" class="java.lang.String" itemvalue="Python.q2_0" />
+        <item index="3" class="java.lang.String" itemvalue="Python.q2_3" />
       </list>
     </recent_temporary>
   </component>
@@ -504,16 +504,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/q2_2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="114" column="23" lean-forward="false" selection-start-line="114" selection-start-column="23" selection-end-line="114" selection-end-column="23" />
-          <folding>
-            <element signature="e#113#124#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/q2_0.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -529,6 +519,16 @@
         <state relative-caret-position="461">
           <caret line="112" column="40" lean-forward="false" selection-start-line="112" selection-start-column="40" selection-end-line="112" selection-end-column="40" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/q2_2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="114" column="23" lean-forward="false" selection-start-line="114" selection-start-column="23" selection-end-line="114" selection-end-column="23" />
+          <folding>
+            <element signature="e#113#124#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

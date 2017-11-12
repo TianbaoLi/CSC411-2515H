@@ -238,6 +238,12 @@ INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/listings/lstlang1.sty
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omlcmr.fd
 INPUT /usr/local/texlive/2017/texmf-dist/tex/latex/base/omlcmr.fd
+INPUT Diagomal_covariance.png
+INPUT ./Diagomal_covariance.png
+INPUT ./Diagomal_covariance.png
+INPUT Leading_eigenvectors.png
+INPUT ./Leading_eigenvectors.png
+INPUT ./Leading_eigenvectors.png
 INPUT report.aux
 INPUT ./report.out
 INPUT ./report.out
