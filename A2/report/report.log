@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.9.25)  11 NOV 2017 23:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.9.25)  12 NOV 2017 16:48
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -582,14 +582,14 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 259.
 Here is how much of TeX's memory you used:
  17374 strings out of 492990
  320095 string characters out of 6132621
- 404540 words of memory out of 5000000
+ 404535 words of memory out of 5000000
  20560 multiletter control sequences out of 15000+600000
  12863 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,14n,54p,407b,1313s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,10n,54p,407b,1313s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/tianbao/.texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
 10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on report.pdf (6 pages, 181911 bytes).
+Output written on report.pdf (6 pages, 181823 bytes).
 PDF statistics:
  251 PDF objects out of 1000 (max. 8388607)
  220 compressed objects within 3 object streams

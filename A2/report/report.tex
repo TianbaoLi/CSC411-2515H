@@ -47,8 +47,8 @@ Given:
     &=-\sum^N_{n=1}(\log p(x^{(n)}|y^{(n)},
     \theta)+\log p(y^{(n)}|\theta))\\
     &=-\sum^N_{n=1}(\log((\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i^{(n)}-\mu_{ki})^2\})+\log\alpha_k)\\
-    &=-\sum^N_{n=1}(-\frac{1}{2}\sum^d_{i=1}2\pi\sigma^2_i-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2+\log\alpha_k)\\
-    &=\sum^N_{n=1}(\sum^d_{i=1}\pi\sigma^2_i+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2-\log\alpha_k)
+    &=-\sum^N_{n=1}(-\frac{1}{2}\sum^d_{i=1}\log(2\pi\sigma^2_i)-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2+\log\alpha_k)\\
+    &=\sum^N_{n=1}(\sum^d_{i=1}\log(\pi\sigma^2_i)+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2-\log\alpha_k)
 \end{align*}
 
 \subsection{Partial derivatives}
@@ -56,8 +56,8 @@ Given:
 \begin{align*}
     \frac{\partial \ell}{\partial \mu_{ki}}&=\frac{\partial(\sum^N_{n=1}\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2)}{\partial \mu_{ki}}\\
     &=-\sum^N_{n=1}\sum^d_{i=1}\frac{1}{\sigma^2_i}\mathbbm{1}(y^{(n)}=k)(x^{(n)}_i-\mu_{ki})\\
-    \frac{\partial \ell}{\partial \sigma_i^2}&=\frac{\partial(\sum^N_{n=1}(\sum^d_{i=1}\pi\sigma^2_i+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2))}{\partial \sigma_i^2}\\
-    &=\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)(2\pi-\frac{1}{2\sigma^4_i}(x^{(n)}_i-\mu_{ki})^2)
+    \frac{\partial \ell}{\partial \sigma_i^2}&=\frac{\partial(\sum^N_{n=1}(\sum^d_{i=1}\log(\pi\sigma^2_i)+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2))}{\partial \sigma_i^2}\\
+    &=\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)(\frac{1}{\sigma^2_i}-\frac{1}{2\sigma^4_i}(x^{(n)}_i-\mu_{ki})^2)
 \end{align*}
 
 \subsection{Estimation}
@@ -66,7 +66,7 @@ Given:
     \frac{\partial \ell}{\partial \mu_{ki}}&=0\\
     \Rightarrow\mu_{ki}&=\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)x^{(n)}_i}{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)}\\
     \frac{\partial \ell}{\partial \sigma_i^2}&=0\\
-    \Rightarrow\sigma_i&=\sqrt[4]{\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*(x^{(n)}_i-\mu_{ki})^2}{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*4\pi}}
+    \Rightarrow\sigma_i&=\sqrt{\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*(x^{(n)}_i-\mu_{ki})^2}{2\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)}}
 \end{align*}
 
 \section{Handwritten digit classification}
