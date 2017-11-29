@@ -48,16 +48,21 @@ class BatchSampler(object):
 class GDOptimizer(object):
     '''
     A gradient descent optimizer with momentum
+
+        lr - learning rate
+        beta - momentum hyperparameter
     '''
 
     def __init__(self, lr, beta=0.0):
         self.lr = lr
         self.beta = beta
+        self.vel = 0.0
 
     def update_params(self, params, grad):
         # Update parameters using GD with momentum and return
         # the updated parameters
         return None
+
 
 class SVM(object):
     '''
@@ -143,6 +148,8 @@ def optimize_test_function(optimizer, w_init=10.0, steps=200):
 def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters):
     '''
     Optimize the SVM with the given hyperparameters. Return the trained SVM.
+
+    SVM weights can be updated using the attribute 'w'. i.e. 'svm.w = updated_weights'
     '''
     return None
 
