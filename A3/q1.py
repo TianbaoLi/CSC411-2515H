@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import BernoulliNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
+from sklearn import svm
 
 def load_data():
     # import and filter data
@@ -83,7 +84,6 @@ def logistic(tfidf_train, train_labels, tfidf_test, test_labels):
 
     return model
 
-
 def SGD(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the stochastic gradient descent model
     model = SGDClassifier(alpha = 0.01, tol = 1e-4)
@@ -93,6 +93,33 @@ def SGD(tfidf_train, train_labels, tfidf_test, test_labels):
     print('SGD train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('SGD test accuracy = {}'.format((test_pred == test_labels).mean()))
+
+    return model
+
+def SVM(tfidf_train, train_labels, tfidf_test, test_labels):
+    # training the support vector machine model
+    tfidf_train = (tfidf_train > 0).astype(int)
+    tfidf_test = (tfidf_test > 0).astype(int)
+    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
+
+    model = svm.SVC(decision_function_shape = 'ovo', kernel = 'linear', tol = 1e-4)
+    Cs = [0.001, 0.01, 0.05, 0.1, 0.5, 1, 5]
+    train_accuracy = []
+    valid_accuracy = []
+    for c in Cs:
+        model.set_params(C = c)
+        model.fit(tfidf_train, train_labels)
+        train_pred = model.predict(tfidf_train)
+        train_accuracy.append((train_pred == train_labels).mean())
+        validation_pred = model.predict(tfidf_validation)
+        valid_accuracy.append((validation_pred == validation_labels).mean())
+
+    opt_C_index = int(np.argmax(valid_accuracy))
+    print('Optimal C for logistic regression = {}'.format(Cs[opt_C_index]))
+    print('SVM train accuracy = {}'.format(train_accuracy[opt_C_index]))
+    print('SVM validation accuracy = {}'.format(valid_accuracy[opt_C_index]))
+    test_pred = model.predict(tfidf_test)
+    print('SVM test accuracy = {}'.format((test_pred == test_labels).mean()))
 
     return model
 
@@ -107,3 +134,5 @@ if __name__ == '__main__':
     logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     print('### Stochastic gradient descent ###')
     SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Support vector machine ###')
+    SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
