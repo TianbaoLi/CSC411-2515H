@@ -73,10 +73,10 @@ def logistic(tfidf_train, train_labels, tfidf_test, test_labels):
         validation_pred = model.predict(tfidf_validation)
         valid_accuracy.append((validation_pred == validation_labels).mean())
 
-    opt_C = Cs[np.argmax(valid_accuracy)]
-    print("Optimal C for logistic regression = ", opt_C)
-    print('Logistic regression train accuracy = ', train_accuracy[opt_C])
-    print('Logistic regression validation accuracy = ', valid_accuracy[opt_C])
+    opt_C = Cs[int(np.argmax(valid_accuracy))]
+    print('Optimal C for logistic regression = {}'.format(opt_C))
+    print('Logistic regression train accuracy = {}'.format(train_accuracy[opt_C]))
+    print('Logistic regression validation accuracy = {}'.format(valid_accuracy[opt_C]))
     test_pred = model.predict(tfidf_test)
     print('Logistic regression test accuracy = {}'.format((test_pred == test_labels).mean()))
 
@@ -85,6 +85,8 @@ if __name__ == '__main__':
     train_bow, test_bow, feature_names = bow_features(train_data, test_data)
     train_tfidf, test_tfidf, feature_names = tf_idf_features(train_data, test_data)
 
-
-    #bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('BernoulliNB baseline')
+    bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('Logistic regression')
     logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    
