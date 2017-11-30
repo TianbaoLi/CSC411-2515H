@@ -14,8 +14,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
 from sklearn import svm
 from sklearn import neighbors
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import (RBF, Matern, RationalQuadratic, ExpSineSquared, DotProduct, ConstantKernel)
+from sklearn.tree import DecisionTreeClassifier
 
 def load_data():
     # import and filter data
@@ -153,32 +152,15 @@ def KNN(tfidf_train, train_labels, tfidf_test, test_labels):
 
     return model
 
-def gaussian(tfidf_train, train_labels, tfidf_test, test_labels):
-    # training the gaussian process model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
-    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
+def decision_tree(tfidf_train, train_labels, tfidf_test, test_labels):
+    # training the decision tree model
+    model = DecisionTreeClassifier()
+    model.fit(tfidf_train, train_labels)
 
-    kernels = [1.0 * RBF(1.0)]
-    train_accuracy = []
-    valid_accuracy = []
-    for kernel in kernels:
-        model = GaussianProcessClassifier(kernel)
-        print kernel.__str__()
-        model.fit(tfidf_train.todense(), train_labels)
-        train_pred = model.predict(tfidf_train)
-        train_accuracy.append((train_pred == train_labels).mean())
-        print(train_pred == train_labels).mean()
-        validation_pred = model.predict(tfidf_validation)
-        valid_accuracy.append((validation_pred == validation_labels).mean())
-        print(validation_pred == validation_labels).mean()
-
-    opt_kernel_index = int(np.argmax(valid_accuracy))
-    print('Optimal model for gaussian process = {}'.format(kernels[opt_kernel_index].__str__()))
-    print('Gaussian process train accuracy = {}'.format(train_accuracy[opt_kernel_index]))
-    print('Gaussian process accuracy = {}'.format(valid_accuracy[opt_kernel_index]))
+    train_pred = model.predict(tfidf_train)
+    print('Decision tree train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
-    print('Gaussian process test accuracy = {}'.format((test_pred == test_labels).mean()))
+    print('Decision tree test accuracy = {}'.format((test_pred == test_labels).mean()))
 
     return model
 
@@ -193,9 +175,9 @@ if __name__ == '__main__':
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
     #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Support vector machine ###')
-    SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Support vector machine ###')
+    #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### K nearest neighbors ###')
     #KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### Gaussian process ###')
-    #gaussian_model = gaussian(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Decision tree ###')
+    decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
