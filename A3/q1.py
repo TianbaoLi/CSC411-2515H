@@ -63,8 +63,6 @@ def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the multinomial naive bayes model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
     tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
     model = MultinomialNB(alpha = 1)
@@ -90,12 +88,10 @@ def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def logistic(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the logistic regression model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
     tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
-    model = LogisticRegression(C = 1.0, penalty = 'l1', tol = 1e-4)
-    Cs = [1, 5, 10, 20, 30, 40, 50]
+    model = LogisticRegression(C = 1.0)
+    Cs = [1, 100, 300, 500, 700, 1000]
     train_accuracy = []
     valid_accuracy = []
     for c in Cs:
@@ -129,8 +125,6 @@ def SGD(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def SVM(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the support vector machine model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
     tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
     model = svm.LinearSVC(penalty = "l1", dual = False, tol = 1e-3)
@@ -156,8 +150,6 @@ def SVM(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def KNN(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the K nearest neighbors model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
     tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
     model = neighbors.KNeighborsClassifier(n_neighbors = 1)
@@ -195,8 +187,6 @@ def decision_tree(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def NN(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the neural network model
-    tfidf_train = (tfidf_train > 0).astype(int)
-    tfidf_test = (tfidf_test > 0).astype(int)
     tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
     model = MLPClassifier(alpha = 1, early_stopping = True)
@@ -227,8 +217,8 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### MultinomialNB baseline ###')
-    mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### MultinomialNB baseline ###')
+    #mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Logistic regression ###')
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
