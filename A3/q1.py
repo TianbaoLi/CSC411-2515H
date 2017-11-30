@@ -10,6 +10,7 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
 from sklearn import svm
@@ -42,6 +43,7 @@ def tf_idf_features(train_data, test_data):
     tf_idf_train = tf_idf_vectorize.fit_transform(train_data.data) #bag-of-word features for training data
     feature_names = tf_idf_vectorize.get_feature_names() #converts feature index to the word it represents.
     tf_idf_test = tf_idf_vectorize.transform(test_data.data)
+    print('Most tf-idf valued word in training set is "{}"'.format(feature_names[tf_idf_train.sum(axis=0).argmax()]))
     return tf_idf_train, tf_idf_test, feature_names
 
 def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
@@ -57,6 +59,22 @@ def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
     print('BernoulliNB baseline train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('BernoulliNB baseline test accuracy = {}'.format((test_pred == test_labels).mean()))
+
+    return model
+
+def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
+    # training the multinomial naive bayes model
+    tfidf_train = (tfidf_train>0).astype(int)
+    tfidf_test = (tfidf_test>0).astype(int)
+
+    model = MultinomialNB()
+    model.fit(tfidf_train, train_labels)
+
+    #evaluate the multinomial naive bayes model
+    train_pred = model.predict(tfidf_train)
+    print('MultinomialNB baseline train accuracy = {}'.format((train_pred == train_labels).mean()))
+    test_pred = model.predict(tfidf_test)
+    print('MultinomialNB baseline test accuracy = {}'.format((test_pred == test_labels).mean()))
 
     return model
 
@@ -199,6 +217,8 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### MultinomialNB baseline ###')
+    mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Logistic regression ###')
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
@@ -209,5 +229,5 @@ if __name__ == '__main__':
     #KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Decision tree ###')
     #decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Neural network ###')
-    NN_model = NN(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Neural network ###')
+    #NN_model = NN(train_tfidf, train_data.target, test_tfidf, test_data.target)
