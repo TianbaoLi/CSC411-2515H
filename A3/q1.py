@@ -13,6 +13,7 @@ from sklearn.naive_bayes import BernoulliNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
 from sklearn import svm
+from sklearn import neighbors
 
 def load_data():
     # import and filter data
@@ -123,6 +124,33 @@ def SVM(tfidf_train, train_labels, tfidf_test, test_labels):
 
     return model
 
+def KNN(tfidf_train, train_labels, tfidf_test, test_labels):
+    # training the K nearest neighbors model
+    tfidf_train = (tfidf_train > 0).astype(int)
+    tfidf_test = (tfidf_test > 0).astype(int)
+    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
+
+    model = neighbors.KNeighborsClassifier(n_neighbors = 1)
+    Ks = range(1, 101, 10)
+    train_accuracy = []
+    valid_accuracy = []
+    for k in Ks:
+        model.set_params(n_neighbors = k)
+        model.fit(tfidf_train, train_labels)
+        train_pred = model.predict(tfidf_train)
+        train_accuracy.append((train_pred == train_labels).mean())
+        validation_pred = model.predict(tfidf_validation)
+        valid_accuracy.append((validation_pred == validation_labels).mean())
+
+    opt_K_index = int(np.argmax(valid_accuracy))
+    print('Optimal K for K nearest neighbors = {}'.format(Ks[opt_K_index]))
+    print('KNN train accuracy = {}'.format(train_accuracy[opt_K_index]))
+    print('KNN validation accuracy = {}'.format(valid_accuracy[opt_K_index]))
+    test_pred = model.predict(tfidf_test)
+    print('SVM test accuracy = {}'.format((test_pred == test_labels).mean()))
+
+    return model
+
 if __name__ == '__main__':
     train_data, test_data = load_data()
     train_bow, test_bow, feature_names = bow_features(train_data, test_data)
@@ -130,9 +158,11 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Logistic regression ###')
-    logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Stochastic gradient descent ###')
-    SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Support vector machine ###')
-    SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Logistic regression ###')
+    #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Stochastic gradient descent ###')
+    #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Support vector machine ###')
+    #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### K nearest neighbors ###')
+    KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
