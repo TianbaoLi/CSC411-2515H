@@ -43,7 +43,6 @@ def tf_idf_features(train_data, test_data):
     tf_idf_train = tf_idf_vectorize.fit_transform(train_data.data) #bag-of-word features for training data
     feature_names = tf_idf_vectorize.get_feature_names() #converts feature index to the word it represents.
     tf_idf_test = tf_idf_vectorize.transform(test_data.data)
-    print('Most tf-idf valued word in training set is "{}"'.format(feature_names[tf_idf_train.sum(axis=0).argmax()]))
     return tf_idf_train, tf_idf_test, feature_names
 
 def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
@@ -64,17 +63,28 @@ def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the multinomial naive bayes model
-    tfidf_train = (tfidf_train>0).astype(int)
-    tfidf_test = (tfidf_test>0).astype(int)
+    tfidf_train = (tfidf_train > 0).astype(int)
+    tfidf_test = (tfidf_test > 0).astype(int)
+    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
 
-    model = MultinomialNB()
-    model.fit(tfidf_train, train_labels)
+    model = MultinomialNB(alpha = 1)
+    As = [1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 0.1, 0.5, 1]
+    train_accuracy = []
+    valid_accuracy = []
+    for a in As:
+        model.set_params(alpha = a)
+        model.fit(tfidf_train, train_labels)
+        train_pred = model.predict(tfidf_train)
+        train_accuracy.append((train_pred == train_labels).mean())
+        validation_pred = model.predict(tfidf_validation)
+        valid_accuracy.append((validation_pred == validation_labels).mean())
 
-    #evaluate the multinomial naive bayes model
-    train_pred = model.predict(tfidf_train)
-    print('MultinomialNB baseline train accuracy = {}'.format((train_pred == train_labels).mean()))
+    opt_A_index = int(np.argmax(valid_accuracy))
+    print('Optimal Alpha for multinomial naive bayes = {}'.format(As[opt_A_index]))
+    print('MultinomialNB accuracy = {}'.format(train_accuracy[opt_A_index]))
+    print('MultinomialNB validation accuracy = {}'.format(valid_accuracy[opt_A_index]))
     test_pred = model.predict(tfidf_test)
-    print('MultinomialNB baseline test accuracy = {}'.format((test_pred == test_labels).mean()))
+    print('MultinomialNB test accuracy = {}'.format((test_pred == test_labels).mean()))
 
     return model
 
