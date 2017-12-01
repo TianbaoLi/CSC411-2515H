@@ -61,7 +61,9 @@ class GDOptimizer(object):
     def update_params(self, params, grad):
         # Update parameters using GD with momentum and return
         # the updated parameters
-        return None
+        self.vel = - self.lr * grad + self.beta * self.vel
+        params += self.vel
+        return params
 
 
 class SVM(object):
@@ -142,7 +144,8 @@ def optimize_test_function(optimizer, w_init=10.0, steps=200):
 
     for _ in range(steps):
         # Optimize and update the history
-        pass
+        w = optimizer.update_params(w, func_grad(w))
+        w_history.append(w)
     return w_history
 
 def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters):
@@ -154,4 +157,17 @@ def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters
     return None
 
 if __name__ == '__main__':
-    pass
+    load_data()
+
+    gdo_0 = GDOptimizer(1.0, 0.0)
+    gdo_9 = GDOptimizer(1.0, 0.9)
+    opt_history = np.zeros(402).reshape(2, 201)
+    opt_history[0] = optimize_test_function(gdo_0, 10.0, 200)
+    opt_history[1] = optimize_test_function(gdo_9, 10.0, 200)
+    #print opt_history
+    plt.plot(range(200 + 1), opt_history[0], label = 'beta = 0.0')
+    plt.plot(range(200 + 1), opt_history[1], label = 'beta = 0.9')
+    plt.legend()
+    plt.xlabel('Steps')
+    plt.ylabel('W')
+    plt.show()
