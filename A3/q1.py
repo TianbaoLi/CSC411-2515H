@@ -183,9 +183,21 @@ def KNN(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def decision_tree(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the decision tree model
-    model = DecisionTreeClassifier()
-    model.fit(tfidf_train, train_labels)
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    Ds = range(1, 1201, 300)
+    scores = []
+    for d in Ds:
+        model = DecisionTreeClassifier(max_depth = d)
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
+    opt_D_index = int(np.argmax(scores))
+    opt_D = Ds[opt_D_index]
+
+    print('Optimal K for decision tree = {}'.format(opt_D))
+    model = DecisionTreeClassifier(max_depth = opt_D)
+    model.fit(tfidf_train, train_labels)
     train_pred = model.predict(tfidf_train)
     print('Decision tree train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
@@ -233,9 +245,9 @@ if __name__ == '__main__':
     #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Support vector machine ###')
     #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### K nearest neighbors ###')
-    KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### Decision tree ###')
-    #decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### K nearest neighbors ###')
+    #KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Decision tree ###')
+    decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Neural network ###')
     #NN_model = NN(train_tfidf, train_data.target, test_tfidf, test_data.target)
