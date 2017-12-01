@@ -159,24 +159,23 @@ def SVM(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def KNN(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the K nearest neighbors model
-    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
-
-    model = neighbors.KNeighborsClassifier(n_neighbors = 1)
-    Ks = range(1, 101, 10)
-    train_accuracy = []
-    valid_accuracy = []
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    Ks = range(1, 11)
+    scores = []
     for k in Ks:
-        model.set_params(n_neighbors = k)
-        model.fit(tfidf_train, train_labels)
-        train_pred = model.predict(tfidf_train)
-        train_accuracy.append((train_pred == train_labels).mean())
-        validation_pred = model.predict(tfidf_validation)
-        valid_accuracy.append((validation_pred == validation_labels).mean())
+        model = neighbors.KNeighborsClassifier(n_neighbors = k)
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
-    opt_K_index = int(np.argmax(valid_accuracy))
-    print('Optimal K for K nearest neighbors = {}'.format(Ks[opt_K_index]))
-    print('KNN train accuracy = {}'.format(train_accuracy[opt_K_index]))
-    print('KNN validation accuracy = {}'.format(valid_accuracy[opt_K_index]))
+    opt_K_index = int(np.argmax(scores))
+    opt_K = Ks[opt_K_index]
+
+    print('Optimal K for K nearest neighbors = {}'.format(opt_K))
+    model = neighbors.KNeighborsClassifier(n_neighbors = opt_K)
+    model.fit(tfidf_train, train_labels)
+    train_pred = model.predict(tfidf_train)
+    print('KNN train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('KNN test accuracy = {}'.format((test_pred == test_labels).mean()))
 
@@ -232,10 +231,10 @@ if __name__ == '__main__':
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
     #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Support vector machine ###')
-    SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### K nearest neighbors ###')
-    #KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Support vector machine ###')
+    #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### K nearest neighbors ###')
+    KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Decision tree ###')
     #decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Neural network ###')
