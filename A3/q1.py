@@ -112,9 +112,20 @@ def logistic(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def SGD(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the stochastic gradient descent model
-    model = SGDClassifier(alpha = 0.01, tol = 1e-4)
-    model.fit(tfidf_train, train_labels)
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    As = [1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 0.1, 0.5, 1.0, 2]
+    scores = []
+    for a in As:
+        model = SGDClassifier(alpha = a, max_iter = 100, tol = 1e-3, learning_rate = 'optimal')
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
+    opt_A_index = int(np.argmax(scores))
+    opt_A = As[opt_A_index]
+    print('Optimal Alpha for stochastic gradient descent = {}'.format(opt_A))
+    model = MultinomialNB(alpha=opt_A)
+    model.fit(tfidf_train, train_labels)
     train_pred = model.predict(tfidf_train)
     print('SGD train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
@@ -218,10 +229,10 @@ if __name__ == '__main__':
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### MultinomialNB baseline ###')
     #mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Logistic regression ###')
-    logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### Stochastic gradient descent ###')
-    #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Logistic regression ###')
+    #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Stochastic gradient descent ###')
+    SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Support vector machine ###')
     #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### K nearest neighbors ###')
