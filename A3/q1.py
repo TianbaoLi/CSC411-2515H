@@ -88,24 +88,23 @@ def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def logistic(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the logistic regression model
-    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
-
-    model = LogisticRegression(C = 1.0)
-    Cs = [1, 100, 300, 500, 700, 1000]
-    train_accuracy = []
-    valid_accuracy = []
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    Cs = [0.01, 0.1, 1, 50, 100, 500, 1000, 2000]
+    scores = []
     for c in Cs:
-        model.set_params(C = c)
-        model.fit(tfidf_train, train_labels)
-        train_pred = model.predict(tfidf_train)
-        train_accuracy.append((train_pred == train_labels).mean())
-        validation_pred = model.predict(tfidf_validation)
-        valid_accuracy.append((validation_pred == validation_labels).mean())
+        model = LogisticRegression(C = c)
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
-    opt_C_index = int(np.argmax(valid_accuracy))
-    print('Optimal C for logistic regression = {}'.format(Cs[opt_C_index]))
-    print('Logistic regression train accuracy = {}'.format(train_accuracy[opt_C_index]))
-    print('Logistic regression validation accuracy = {}'.format(valid_accuracy[opt_C_index]))
+    opt_C_index = int(np.argmax(scores))
+    opt_C = Cs[opt_C_index]
+
+    print('Optimal C for logistic regression = {}'.format(opt_C))
+    model = LogisticRegression(C = opt_C)
+    model.fit(tfidf_train, train_labels)
+    train_pred = model.predict(tfidf_train)
+    print('Logistic regression train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('Logistic regression test accuracy = {}'.format((test_pred == test_labels).mean()))
 
@@ -217,10 +216,10 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### MultinomialNB baseline ###')
-    mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### Logistic regression ###')
-    #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### MultinomialNB baseline ###')
+    #mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Logistic regression ###')
+    logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
     #SGD_model = SGD(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Support vector machine ###')
