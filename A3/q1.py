@@ -207,24 +207,22 @@ def decision_tree(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def NN(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the neural network model
-    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
-
-    model = MLPClassifier(alpha = 1, early_stopping = True)
-    As = [0.001, 0.01, 0.05, 0.1, 0.5, 1, 5]
-    train_accuracy = []
-    valid_accuracy = []
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    As = [1e-8, 1e-6, 1e-4, 0.01, 0.1, 1]
+    scores = []
     for a in As:
-        model.set_params(alpha = a)
-        model.fit(tfidf_train, train_labels)
-        train_pred = model.predict(tfidf_train)
-        train_accuracy.append((train_pred == train_labels).mean())
-        validation_pred = model.predict(tfidf_validation)
-        valid_accuracy.append((validation_pred == validation_labels).mean())
+        model = MLPClassifier(alpha = a, early_stopping = True)
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
-    opt_A_index = int(np.argmax(valid_accuracy))
-    print('Optimal Alpha for neural network = {}'.format(As[opt_A_index]))
-    print('Neural network accuracy = {}'.format(train_accuracy[opt_A_index]))
-    print('Neural network validation accuracy = {}'.format(valid_accuracy[opt_A_index]))
+    opt_A_index = int(np.argmax(scores))
+    opt_A = As[opt_A_index]
+    print('Optimal Alpha for neural network = {}'.format(opt_A))
+    model = MLPClassifier(alpha = opt_A, early_stopping = True)
+    model.fit(tfidf_train, train_labels)
+    train_pred = model.predict(tfidf_train)
+    print('Neural network train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('Neural network test accuracy = {}'.format((test_pred == test_labels).mean()))
 
@@ -247,7 +245,7 @@ if __name__ == '__main__':
     #SVM_model = SVM(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### K nearest neighbors ###')
     #KNN_model = KNN(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    print('### Decision tree ###')
-    decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### Neural network ###')
-    #NN_model = NN(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    #print('### Decision tree ###')
+    #decision_tree_model = decision_tree(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### Neural network ###')
+    NN_model = NN(train_tfidf, train_data.target, test_tfidf, test_data.target)
