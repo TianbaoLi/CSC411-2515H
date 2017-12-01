@@ -6,6 +6,8 @@ Question 1 Skeleton Code
 
 import sklearn
 import numpy as np
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
@@ -63,24 +65,22 @@ def bnb_baseline(tfidf_train, train_labels, tfidf_test, test_labels):
 
 def mnb(tfidf_train, train_labels, tfidf_test, test_labels):
     # training the multinomial naive bayes model
-    tfidf_train, tfidf_validation, train_labels, validation_labels = train_test_split(tfidf_train, train_labels, test_size = 0.2)
-
-    model = MultinomialNB(alpha = 1)
-    As = [1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 0.1, 0.5, 1]
-    train_accuracy = []
-    valid_accuracy = []
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    As = [1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 0.1, 0.5, 1.0, 2, 5, 10]
+    scores = []
     for a in As:
-        model.set_params(alpha = a)
-        model.fit(tfidf_train, train_labels)
-        train_pred = model.predict(tfidf_train)
-        train_accuracy.append((train_pred == train_labels).mean())
-        validation_pred = model.predict(tfidf_validation)
-        valid_accuracy.append((validation_pred == validation_labels).mean())
+        model = MultinomialNB(alpha = a)
+        score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+        scores.append(np.mean(score))
 
-    opt_A_index = int(np.argmax(valid_accuracy))
-    print('Optimal Alpha for multinomial naive bayes = {}'.format(As[opt_A_index]))
-    print('MultinomialNB accuracy = {}'.format(train_accuracy[opt_A_index]))
-    print('MultinomialNB validation accuracy = {}'.format(valid_accuracy[opt_A_index]))
+    opt_A_index = int(np.argmax(scores))
+    opt_A = As[opt_A_index]
+    print('Optimal Alpha for multinomial naive bayes = {}'.format(opt_A))
+    model = MultinomialNB(alpha = opt_A)
+    model.fit(tfidf_train, train_labels)
+    train_pred = model.predict(tfidf_train)
+    print('MultinomialNB train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('MultinomialNB test accuracy = {}'.format((test_pred == test_labels).mean()))
 
@@ -217,8 +217,8 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### MultinomialNB baseline ###')
-    #mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### MultinomialNB baseline ###')
+    mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Logistic regression ###')
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
