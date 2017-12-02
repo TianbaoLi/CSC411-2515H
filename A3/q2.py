@@ -93,7 +93,7 @@ class SVM(object):
         hinge_loss = np.zeros(n)
         for i in range(n):
             hinge_loss[i] = np.max(self.c * (1 - y[i] * np.vdot(self.w, X[i, :])), 0)
-        return hinge_loss
+        return np.mean(hinge_loss)
 
     def grad(self, X, y):
         '''
