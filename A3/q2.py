@@ -73,7 +73,13 @@ class SVM(object):
 
     def __init__(self, c, feature_count):
         self.c = c
-        self.w = np.random.normal(0.0, 0.1, feature_count)
+        self.w = np.random.normal(0.0, 0.1, feature_count + 1)
+
+    def addBias(selfself, X):
+        n = X.shape[0]
+        bias = np.ones((1, n))
+        X = np.concatenate((bias.T, X), axis = 1)
+        return X
         
     def hinge_loss(self, X, y):
         '''
@@ -82,6 +88,7 @@ class SVM(object):
         Returns a length-n vector containing the hinge-loss per data point.
         '''
         # Implement hinge loss
+        X = self.addBias(X)
         n = X.shape[0]
         hinge_loss = np.zeros(n)
         for i in range(n):
@@ -96,6 +103,7 @@ class SVM(object):
         Returns the gradient with respect to the SVM parameters (shape (m,)).
         '''
         # Compute (sub-)gradient of SVM objective
+        X = self.addBias(X)
         n = X.shape[0]
         m = X.shape[1]
         gradients = np.zeros(n, m).reshape(n, m)
@@ -113,6 +121,7 @@ class SVM(object):
         Returns the predicted class labels (shape (n,))
         '''
         # Classify points as +1 or -1
+        X = self.addBias(X)
         n = X.shape[0]
         pred = np.zeros(n)
         for i in range(n):
