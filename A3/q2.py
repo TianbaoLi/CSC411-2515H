@@ -92,7 +92,7 @@ class SVM(object):
         n = X.shape[0]
         hinge_loss = np.zeros(n)
         for i in range(n):
-            hinge_loss[i] = np.max(1 - y[i] * np.vdot(self.w, X[i, :]), 0)
+            hinge_loss[i] = np.max(self.c * (1 - y[i] * np.vdot(self.w, X[i, :])), 0)
         return hinge_loss
 
     def grad(self, X, y):
@@ -106,13 +106,11 @@ class SVM(object):
         X = self.addBias(X)
         n = X.shape[0]
         m = X.shape[1]
-        gradients = np.zeros(n * m).reshape(n, m)
+        gradients = np.zeros(m)
         for i in range(n):
-            if - y[i] * np.vdot(self.w, X[i, :]) < 1:
-                gradients[i, :] = - y[i] * X[i, :]
-            else:
-                gradients[i, :] = np.zeros(m)
-        gradients = np.mean(gradients, axis = 0)
+            if y[i] * np.vdot(self.w, X[i, :]) < 1:
+                gradients += - self.c * y[i] * X[i, :]
+        gradients = 1.0 * gradients / n
         return gradients
 
     def classify(self, X):
@@ -192,18 +190,18 @@ def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters
 if __name__ == '__main__':
     train_data, train_targets, test_data, test_targets = load_data()
 
-    #print "Test SGD"
-    #gdo_0 = GDOptimizer(1.0, 0.0)
-    #gdo_9 = GDOptimizer(1.0, 0.9)
-    #opt_history = np.zeros(402).reshape(2, 201)
-    #opt_history[0] = optimize_test_function(gdo_0, 10.0, 200)
-    #opt_history[1] = optimize_test_function(gdo_9, 10.0, 200)
-    #plt.plot(range(200 + 1), opt_history[0], label = 'beta = 0.0')
-    #plt.plot(range(200 + 1), opt_history[1], label = 'beta = 0.9')
-    #plt.legend()
-    #plt.xlabel('Steps')
-    #plt.ylabel('W')
-    #plt.show()
+    print "Test SGD"
+    gdo_0 = GDOptimizer(1.0, 0.0)
+    gdo_9 = GDOptimizer(1.0, 0.9)
+    opt_history = np.zeros(402).reshape(2, 201)
+    opt_history[0] = optimize_test_function(gdo_0, 10.0, 200)
+    opt_history[1] = optimize_test_function(gdo_9, 10.0, 200)
+    plt.plot(range(200 + 1), opt_history[0], label = 'beta = 0.0')
+    plt.plot(range(200 + 1), opt_history[1], label = 'beta = 0.9')
+    plt.legend()
+    plt.xlabel('Steps')
+    plt.ylabel('W')
+    plt.show()
 
     print "Test SVM"
     m = 100
@@ -229,5 +227,5 @@ if __name__ == '__main__':
     print "SVM 1 training accuracy = ", (train_pred == train_targets).mean()
     test_pred = svm_1.classify(test_data)
     print "SVM 1 test accuracy = ", (test_pred == test_targets).mean()
-    plt.imshow(svm_1.w[: -1].reshape(28, 28), cmap='gray')
+    plt.imshow(svm_1.w[: -1].reshape(28, 28), cmap = 'gray')
     plt.show()
