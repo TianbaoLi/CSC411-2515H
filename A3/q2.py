@@ -1,6 +1,7 @@
 import numpy as np 
 
 from sklearn.datasets import fetch_mldata
+from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 
 np.random.seed(1847)
@@ -92,7 +93,7 @@ class SVM(object):
         n = X.shape[0]
         hinge_loss = np.zeros(n)
         for i in range(n):
-            hinge_loss[i] = np.max(self.c * (1 - y[i] * np.vdot(self.w, X[i, :])), 0)
+            hinge_loss[i] = np.max((1 - y[i] * np.vdot(self.w, X[i, :])), 0)
         return np.mean(hinge_loss)
 
     def grad(self, X, y):
@@ -109,7 +110,9 @@ class SVM(object):
         gradients = np.zeros(m)
         for i in range(n):
             if y[i] * np.vdot(self.w, X[i, :]) < 1:
-                gradients += - self.c * y[i] * X[i, :]
+                gradients += - self.c * y[i] * X[i, :] + self.w
+            else:
+                gradients += self.w
         gradients = 1.0 * gradients / n
         return gradients
 
@@ -187,10 +190,43 @@ def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters
         w_history[i, :] = svm.w
     return svm
 
+def cross_validation(train_data, train_targets, optimizer):
+    print "Train SVM for beta = " + str(optimizer.beta)
+    m = 100
+    T = 500
+    Cs = [0.01, 0.1, 1, 10, 100]
+    splits = 5
+    kf = KFold(splits, shuffle = True, random_state = 0)
+    val_accuracy = []
+    svm = None
+
+    for c in Cs:
+        accuracy = 0.0
+        for train_index, test_index in kf.split(train_data, train_targets):
+            X_train, X_val = train_data[train_index], train_data[test_index]
+            y_train, y_val = train_targets[train_index], train_targets[test_index]
+            svm = optimize_svm(X_train, y_train, c, optimizer, m, T)
+            val_pred = svm.classify(X_val)
+            accuracy += (val_pred == y_val).mean()
+        val_accuracy.append(accuracy / splits)
+
+    opt_C_index = int(np.argmax(val_accuracy))
+    opt_C = Cs[opt_C_index]
+    print('Optimal C = {}'.format(opt_C))
+    svm_0 = optimize_svm(train_data, train_targets, opt_C, optimizer, m, T)
+    print "Training loss = ", svm.hinge_loss(train_data, train_targets)
+    print "Test loss = ", svm.hinge_loss(test_data, test_targets)
+    train_pred = svm.classify(train_data)
+    print "Training accuracy = ", (train_pred == train_targets).mean()
+    test_pred = svm.classify(test_data)
+    print "Test accuracy = ", (test_pred == test_targets).mean()
+    plt.imshow(svm.w[: -1].reshape(28, 28), cmap = 'gray')
+    plt.show()
+
 if __name__ == '__main__':
     train_data, train_targets, test_data, test_targets = load_data()
 
-    print "Test SGD"
+    print "Train SGD"
     gdo_0 = GDOptimizer(1.0, 0.0)
     gdo_9 = GDOptimizer(1.0, 0.9)
     opt_history = np.zeros(402).reshape(2, 201)
@@ -203,29 +239,8 @@ if __name__ == '__main__':
     plt.ylabel('W')
     plt.show()
 
-    print "Test SVM"
-    m = 100
-    T = 500
-    C = 1.0
-
     gdo_0 = GDOptimizer(0.05, 0.0)
-    svm_0 = optimize_svm(train_data, train_targets, C, gdo_0, m, T)
-    print "SVM 0 training loss = ", svm_0.hinge_loss(train_data, train_targets)
-    print "SVM 0 test loss = ", svm_0.hinge_loss(test_data, test_targets)
-    train_pred = svm_0.classify(train_data)
-    print "SVM 0 training accuracy = ", (train_pred == train_targets).mean()
-    test_pred = svm_0.classify(test_data)
-    print "SVM 0 test accuracy = ", (test_pred == test_targets).mean()
-    plt.imshow(svm_0.w[: -1].reshape(28, 28), cmap = 'gray')
-    plt.show()
+    cross_validation(train_data, train_targets, gdo_0)
 
     gdo_1 = GDOptimizer(0.05, 0.1)
-    svm_1 = optimize_svm(train_data, train_targets, C, gdo_1, m, T)
-    print "SVM 1 training loss = ", svm_1.hinge_loss(train_data, train_targets)
-    print "SVM 1 test loss = ", svm_1.hinge_loss(test_data, test_targets)
-    train_pred = svm_1.classify(train_data)
-    print "SVM 1 training accuracy = ", (train_pred == train_targets).mean()
-    test_pred = svm_1.classify(test_data)
-    print "SVM 1 test accuracy = ", (test_pred == test_targets).mean()
-    plt.imshow(svm_1.w[: -1].reshape(28, 28), cmap = 'gray')
-    plt.show()
+    cross_validation(train_data, train_targets, gdo_1)
