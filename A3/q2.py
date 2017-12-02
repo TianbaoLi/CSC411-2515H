@@ -106,12 +106,13 @@ class SVM(object):
         X = self.addBias(X)
         n = X.shape[0]
         m = X.shape[1]
-        gradients = np.zeros(n, m).reshape(n, m)
+        gradients = np.zeros(n * m).reshape(n, m)
         for i in range(n):
             if - y[i] * np.vdot(self.w, X[i, :]) < 1:
                 gradients[i, :] = - y[i] * X[i, :]
             else:
                 gradients[i, :] = np.zeros(m)
+        gradients = np.mean(gradients, axis = 0)
         return gradients
 
     def classify(self, X):
@@ -179,20 +180,54 @@ def optimize_svm(train_data, train_targets, penalty, optimizer, batchsize, iters
 
     SVM weights can be updated using the attribute 'w'. i.e. 'svm.w = updated_weights'
     '''
-    return None
+    svm = SVM(penalty, train_data.shape[1])
+    w_history = np.zeros((iters + 1) * (train_data.shape[1] + 1)).reshape(iters + 1, train_data.shape[1] + 1)
+    batch_sampler = BatchSampler(train_data, train_targets, batchsize)
+    for i in range(1, iters + 1):
+        X_b, y_b = batch_sampler.get_batch()
+        svm.w = optimizer.update_params(svm.w, svm.grad(X_b, y_b))
+        w_history[i, :] = svm.w
+    return svm
 
 if __name__ == '__main__':
-    load_data()
+    train_data, train_targets, test_data, test_targets = load_data()
 
-    gdo_0 = GDOptimizer(1.0, 0.0)
-    gdo_9 = GDOptimizer(1.0, 0.9)
-    opt_history = np.zeros(402).reshape(2, 201)
-    opt_history[0] = optimize_test_function(gdo_0, 10.0, 200)
-    opt_history[1] = optimize_test_function(gdo_9, 10.0, 200)
-    #print opt_history
-    plt.plot(range(200 + 1), opt_history[0], label = 'beta = 0.0')
-    plt.plot(range(200 + 1), opt_history[1], label = 'beta = 0.9')
-    plt.legend()
-    plt.xlabel('Steps')
-    plt.ylabel('W')
+    #print "Test SGD"
+    #gdo_0 = GDOptimizer(1.0, 0.0)
+    #gdo_9 = GDOptimizer(1.0, 0.9)
+    #opt_history = np.zeros(402).reshape(2, 201)
+    #opt_history[0] = optimize_test_function(gdo_0, 10.0, 200)
+    #opt_history[1] = optimize_test_function(gdo_9, 10.0, 200)
+    #plt.plot(range(200 + 1), opt_history[0], label = 'beta = 0.0')
+    #plt.plot(range(200 + 1), opt_history[1], label = 'beta = 0.9')
+    #plt.legend()
+    #plt.xlabel('Steps')
+    #plt.ylabel('W')
+    #plt.show()
+
+    print "Test SVM"
+    m = 100
+    T = 500
+    C = 1.0
+
+    gdo_0 = GDOptimizer(0.05, 0.0)
+    svm_0 = optimize_svm(train_data, train_targets, C, gdo_0, m, T)
+    print "SVM 0 training loss = ", svm_0.hinge_loss(train_data, train_targets)
+    print "SVM 0 test loss = ", svm_0.hinge_loss(test_data, test_targets)
+    train_pred = svm_0.classify(train_data)
+    print "SVM 0 training accuracy = ", (train_pred == train_targets).mean()
+    test_pred = svm_0.classify(test_data)
+    print "SVM 0 test accuracy = ", (test_pred == test_targets).mean()
+    plt.imshow(svm_0.w[: -1].reshape(28, 28), cmap = 'gray')
+    plt.show()
+
+    gdo_1 = GDOptimizer(0.05, 0.1)
+    svm_1 = optimize_svm(train_data, train_targets, C, gdo_1, m, T)
+    print "SVM 1 training loss = ", svm_1.hinge_loss(train_data, train_targets)
+    print "SVM 1 test loss = ", svm_1.hinge_loss(test_data, test_targets)
+    train_pred = svm_1.classify(train_data)
+    print "SVM 1 training accuracy = ", (train_pred == train_targets).mean()
+    test_pred = svm_1.classify(test_data)
+    print "SVM 1 test accuracy = ", (test_pred == test_targets).mean()
+    plt.imshow(svm_1.w[: -1].reshape(28, 28), cmap='gray')
     plt.show()
