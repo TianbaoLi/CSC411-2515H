@@ -96,7 +96,15 @@ class SVM(object):
         Returns the gradient with respect to the SVM parameters (shape (m,)).
         '''
         # Compute (sub-)gradient of SVM objective
-        return None
+        n = X.shape[0]
+        m = X.shape[1]
+        gradients = np.zeros(n, m).reshape(n, m)
+        for i in range(n):
+            if - y[i] * np.vdot(self.w, X[i, :]) < 1:
+                gradients[i, :] = - y[i] * X[i, :]
+            else:
+                gradients[i, :] = np.zeros(m)
+        return gradients
 
     def classify(self, X):
         '''
