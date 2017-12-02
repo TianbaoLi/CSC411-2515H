@@ -82,7 +82,11 @@ class SVM(object):
         Returns a length-n vector containing the hinge-loss per data point.
         '''
         # Implement hinge loss
-        return None
+        n = X.shape[0]
+        hinge_loss = np.zeros(n)
+        for i in range(n):
+            hinge_loss[i] = np.max(1 - y[i] * np.vdot(self.w, X[i, :]), 0)
+        return hinge_loss
 
     def grad(self, X, y):
         '''
