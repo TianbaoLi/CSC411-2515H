@@ -113,7 +113,11 @@ class SVM(object):
         Returns the predicted class labels (shape (n,))
         '''
         # Classify points as +1 or -1
-        return None
+        n = X.shape[0]
+        pred = np.zeros(n)
+        for i in range(n):
+            pred[i] = 1 if np.vdot(self.w, X[i, :]) > 0 else -1
+        return pred
 
 def load_data():
     '''
