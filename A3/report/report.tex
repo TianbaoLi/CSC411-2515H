@@ -11,15 +11,99 @@
 \usepackage{amssymb}
 \usepackage{bbm}
 
-\title{CSC411 Fall 2017\\Assignment 2 Report}
+\title{CSC411 Fall 2017\\Assignment 3 Report}
 \author{Tianbao Li}
-\date{2017/11/11}
+\date{2017/12/04}
 
 \begin{document}
 
 \maketitle
 
-\section{Q1: Class-conditional gaussians}
+\section{Q1: 20 Newsgroups prediction}
+
+\subsection{Data summary}
+
+Here is the detailed information of the dataset:
+
+\begin{itemize}
+    \item data set: \href{http://scikit-learn.org/stable/datasets/twenty_newsgroups.html}{The 20 newsgroups text}
+    \item data amount: 11314
+    \item feature amount: 101631
+    \item data representation: tf-idf
+    \item baseline: Bernoulli Naive-Bayes classifier
+\end{itemize}
+
+\subsection{Model training}
+
+To train model to outperform the baseline, here we useopen-souece code of \href{http://scikit-learn.org/stable/}{scikit-learn}. Here, I picked several different algorithms and trained their hyper-parameters with k-fold validation. The detailed better hyper-parameters, train losses (0-1 loss), test losses (0-1 loss) are shown in Table~\ref{tab: Model_comparison}. From the result of the validation losses, the best three models are Neural Networks, Multinomial Naive Bayes, Logist Regression, and has the same best results in test dataset.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    Model & Hyper-pramater & Train loss & test loss\\
+    \hline
+    BernoulliNB &  & 0.598727240587 & 0.457912904939\\
+    \hline
+    MultinomialNB & $\alpha=0.01$ & 0.958900477285 & 0.700212426978\\
+    \hline
+    Logist Regression & $C=500$ & 0.974721583878 & 0.683483802443\\
+    \hline
+    SGD & $\alpha=0.0001$ & 0.962877850451 & 0.671136484334\\
+    \hline
+    SVM & $C=1$ & 0.895704436981 & 0.67750929368\\
+    \hline
+    KNN & $K=1$ & 0.973749337104 & 0.113382899628\\
+    \hline
+    Decision Tree & $K=601$ & 0.974721583878 & 0.4026818906\\
+    \hline
+    Neural Networks & $\alpha=$ &  & \\
+    \hline
+    \end{tabular}
+\caption{Model comparison}
+\label{tab: Model_comparison}
+\end{table}
+
+\subsection{Hyper-parameters training}
+
+To train models by choosing better-fitting parameters, I splited training data by \href{http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html}{KFold} and run cross valiadation by \href{http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html}{cross\_val\_score}.
+
+Here, taking multinomial Naive Bayes as an example. Hyper-parameter $\alpha$ is used for smoothing. I picked several possible $\alpha$ value and compared by validation loss, then chose a better $\alpha$.
+
+\begin{lstlisting}[language = Python]
+splits = 5
+kf = KFold(splits, shuffle = True, random_state = 0)
+As = [1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 0.1, 0.5, 1.0, 2, 5, 10]
+scores = []
+for a in As:
+    model = MultinomialNB(alpha = a)
+    score = cross_val_score(model, tfidf_train, train_labels, cv = kf)
+    scores.append(np.mean(score))
+opt_A_index = int(np.argmax(scores))
+opt_A = As[opt_A_index]
+\end{lstlisting}
+
+\subsection{Model selection}
+
+For the three well-working models, they have their advantages for solving this problem.
+
+\begin{itemize}
+    \item \textbf{Neural Networks} can work well for complex models, especially when it comes deeper.
+    \item \textbf{Multinomial Naive Bayes} implements the naive Bayes algorithm for multinomially distributed data, text classification usually holds such structure.
+    \item \textbf{Logistic Regression} is famous for linear classification, which the newsgroup data has similar distribution.
+\end{itemize}
+
+\subsection{Class confusion}
+
+
+
+\bibliographystyle{plain}
+\bibliography{bibliography.bib}
+\end{document}
+
+
+
+
 
 Given:
 
@@ -252,8 +336,3 @@ For the handwritten digit classification problem, we use models of KNN, conditio
     \item conditional Gaussian: Because the pattern for each class seems fixed, so data points for a certain class gather around the mean. Such structure can be easily caught by Gaussian.
     \item naive Bayes: Naive Bayes has the assumption that all features should be i.i.d given a data point. However, as we can see from the figures that each feature corresponds to a pixel in the figure. For a digit, pixel connects with each other and form the shape of the digit. So the features here are not i.i.d. Naive Bayes could not work well upon obeying the assumption.
 \end{itemize}
-
-
-\bibliographystyle{plain}
-\bibliography{bibliography.bib}
-\end{document}
