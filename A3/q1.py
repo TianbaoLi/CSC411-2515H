@@ -219,14 +219,41 @@ def NN(tfidf_train, train_labels, tfidf_test, test_labels):
     opt_A_index = int(np.argmax(scores))
     opt_A = As[opt_A_index]
     print('Optimal Alpha for neural network = {}'.format(opt_A))
-    model = MLPClassifier(alpha = opt_A, early_stopping = True)
+    model = MLPClassifier(alpha = opt_A, max_iter = 100, tol = 1e-3, learning_rate = 'optimal', early_stopping = True)
     model.fit(tfidf_train, train_labels)
     train_pred = model.predict(tfidf_train)
     print('Neural network train accuracy = {}'.format((train_pred == train_labels).mean()))
     test_pred = model.predict(tfidf_test)
     print('Neural network test accuracy = {}'.format((test_pred == test_labels).mean()))
 
+    confusion = getConfusion(test_pred, test_labels)
+    amax, index_x, index_y = getMostConfused(confusion)
+    print 'Max confused at class ' + str(index_x) + ' and ' + str(index_y)
+
     return model
+
+def getConfusion(test_pred, test_label):
+    G = 20
+    N = test_pred.shape[0]
+    confusion = np.zeros(G ** 2).reshape(G, G)
+    for n in range(N):
+        i = test_pred[n]
+        j = test_label[n]
+        confusion[i][j] += 1
+
+    return confusion
+
+def getMostConfused(confusion):
+    G = 20
+    amax = index_x = index_y = 0
+    for i in range(G):
+        for j in range(G):
+            if confusion[i][j] > amax and i != j:
+                amax = confusion[i][j]
+                index_x = i
+                index_y = j
+
+    return amax, index_x, index_y
 
 if __name__ == '__main__':
     train_data, test_data = load_data()
@@ -235,8 +262,8 @@ if __name__ == '__main__':
 
     print('### BernoulliNB baseline ###')
     bnb_model = bnb_baseline(train_tfidf, train_data.target, test_tfidf, test_data.target)
-    #print('### MultinomialNB baseline ###')
-    #mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
+    print('### MultinomialNB ###')
+    mnb_model = mnb(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Logistic regression ###')
     #logistic_model = logistic(train_tfidf, train_data.target, test_tfidf, test_data.target)
     #print('### Stochastic gradient descent ###')
