@@ -1,0 +1,259 @@
+\documentclass[a4paper]{article}
+
+\usepackage{fullpage} % Package to use full page
+\usepackage{parskip} % Package to tweak paragraph skipping
+\usepackage{tikz} % Package for drawing
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings} % iPackage for code
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+
+\title{CSC411 Fall 2017\\Assignment 2 Report}
+\author{Tianbao Li}
+\date{2017/11/11}
+
+\begin{document}
+
+\maketitle
+
+\section{Q1: Class-conditional gaussians}
+
+Given:
+
+\begin{equation}
+    p(y=k)=a_k
+\end{equation}
+
+\begin{equation}
+    p(\mathbf{x}|y=k,\mu,\sigma)=(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ki})^2\}
+\end{equation}
+
+\subsection{Bayes' rule derivation}
+
+\begin{align*}
+    p(y=k|\mathbf{x},\mu,\sigma)&=\frac{p(\mathbf{x}|y=k,\mu,\sigma)p(y=k)}{p(\mathbf{x}|\mu,\sigma)}\\
+    &=\frac{p(\mathbf{x}|y=k,\mu,\sigma)p(y=k)}{\sum^K_{j=1}p(\mathbf{x}|y=j,\mu,\sigma)}\\
+    &=\frac{(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ki})^2\}a_k}{\sum^K_{j=1}(\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i-\mu_{ji})^2\}}
+\end{align*}
+
+\subsection{Negative likelihood function (NLL)}
+
+\begin{align*}
+    \ell(\theta;D)&=-\log p(y^{(1)},\mathbf{x}^{(1)},y^{(2)},\mathbf{x}^{(2)},\dots,y^{(N)},\mathbf{x}^{(N)}|\theta)\\
+    &=-\log\prod^N_{n=1}p(y^{(n)},x^{(n)}|\theta)\\
+    &=-\sum^N_{n=1}(\log p(x^{(n)}|y^{(n)},
+    \theta)+\log p(y^{(n)}|\theta))\\
+    &=-\sum^N_{n=1}(\log((\prod^d_{i=1}2\pi\sigma^2_i)^{-1/2}\exp\{-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x_i^{(n)}-\mu_{ki})^2\})+\log\alpha_k)\\
+    &=-\sum^N_{n=1}(-\frac{1}{2}\sum^d_{i=1}\log(2\pi\sigma^2_i)-\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2+\log\alpha_k)\\
+    &=\sum^N_{n=1}(\sum^d_{i=1}\log(\pi\sigma^2_i)+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2-\log\alpha_k)
+\end{align*}
+
+\subsection{Partial derivatives}
+
+\begin{align*}
+    \frac{\partial \ell}{\partial \mu_{ki}}&=\frac{\partial(\sum^N_{n=1}\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2)}{\partial \mu_{ki}}\\
+    &=-\sum^N_{n=1}\sum^d_{i=1}\frac{1}{\sigma^2_i}\mathbbm{1}(y^{(n)}=k)(x^{(n)}_i-\mu_{ki})\\
+    \frac{\partial \ell}{\partial \sigma_i^2}&=\frac{\partial(\sum^N_{n=1}(\sum^d_{i=1}\log(\pi\sigma^2_i)+\sum^d_{i=1}\frac{1}{2\sigma^2_i}(x^{(n)}_i-\mu_{ki})^2))}{\partial \sigma_i^2}\\
+    &=\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)(\frac{1}{\sigma^2_i}-\frac{1}{2\sigma^4_i}(x^{(n)}_i-\mu_{ki})^2)
+\end{align*}
+
+\subsection{Estimation}
+
+\begin{align*}
+    \frac{\partial \ell}{\partial \mu_{ki}}&=0\\
+    \Rightarrow\mu_{ki}&=\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)x^{(n)}_i}{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)}\\
+    \frac{\partial \ell}{\partial \sigma_i^2}&=0\\
+    \Rightarrow\sigma_i&=\sqrt{\frac{\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)*(x^{(n)}_i-\mu_{ki})^2}{2\sum^N_{n=1}\sum^d_{i=1}\mathbbm{1}(y^{(n)}=k)}}
+\end{align*}
+
+\section{Handwritten digit classification}
+
+In this assignemnt, we use the dataset of handwritten digit. To get a macro view of the data, here we plot the means for each data classes in the training set, shown in Figure~\ref{fig: Trainging_data_mean}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Trainging_data_mean}
+\caption{Mean for each class}
+\label{fig: Trainging_data_mean}
+\end{figure}
+
+\subsection{K-NN classifier}
+
+Fisrt, we build a K nearest neighbor classifier using Euclidean distance on the data.
+
+\subsubsection{Accuracy for certain K values}
+
+\begin{itemize}
+    \item for K = 1
+    \begin{itemize}
+        \item train classification accuracy: 1.0
+        \item test classification accuracy: 0.96875
+    \end{itemize}
+    \item for K = 15
+    \begin{itemize}
+        \item train classification accuracy: 0.961
+        \item test classification accuracy: 0.959
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Ties solution}
+
+During the implementation, one important problem is that ties usually happens and need to be broken. The solution is shown as follows.
+
+\begin{lstlisting}[language = Python]
+def query_knn(self, test_point, k):
+    digit = None
+    dist = self.l2_distance(test_point)
+    noTies = False
+    while noTies == False:
+        mink = np.argpartition(dist, k)[:k]
+        counts = np.bincount(self.train_labels[mink].astype(int))
+        digit = np.argwhere(counts == np.amax(counts))
+        if len(digit) > 1:
+            k = k - 1
+        else:
+            noTies = True
+    return digit
+\end{lstlisting}
+
+While running KNN, if ties happen (which means two classes has the same maximum count), we try to decrease k by 1 and run the KNN again until no ties. As the class label should focus on one or a few classes, ties are unlikely to happen when $K=1$, so this should be a solution to get an answer without ties.
+
+\subsubsection{Best k}
+
+Here we implement 10 fold cross validation in range 1-15 to find the optimal K. By finding minimun validation error, optimal K for this problem is that $K=3$ and accuracies are shown as follows.
+
+\begin{itemize}
+    \item train classification accuracy: 1.0
+    \item valiadation classification accuracy: 0.96514286
+    \item test classification accuracy: 0.96875
+\end{itemize}
+
+\subsection{Conditional gaussian classifier training}
+
+\subsubsection{Diagonal covariance}
+
+The diagonal elements of each covariance matrix $\Sigma_k$ can be plotted as Figure~\ref{fig: Diagomal_covariance}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Diagomal_covariance}
+\caption{Diagonal elements of covariance for each class}
+\label{fig: Diagomal_covariance}
+\end{figure}
+
+\subsubsection{Average conditional log-likelihood}
+
+The average conditional log-likelihood for each class is shown as follows.
+
+\begin{itemize}
+    \item training data avg conditional likelihood: [-2.78902836 -2.48009327 -2.46864922 -2.53467722\\-2.49894322 -2.93938866
+ -2.4646036  -3.70354979 -2.47281232 -2.74221317]
+    \item test data avg conditional likelihood: [-3.22599621 -4.13098548 -2.44591828 -3.1675836\\-2.65604537 -3.69867522
+ -3.67902811 -7.62636215 -2.81381993 -3.95651773]
+\end{itemize}
+
+\subsubsection{Accuracy}
+
+By selecting the most likely posterior class for each datapoint as prediction, the accuracy is shown as follows.
+
+\begin{itemize}
+    \item training accuracy: 0.981285714286
+    \item test accuracy: 0.9605
+\end{itemize}
+
+\subsubsection{Leading eigenvectors}
+
+The leading eigenvectors of each covariance matrix $\Sigma_k$ can be plotted as Figure~\ref{fig: Leading_eigenvectors}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Leading_eigenvectors}
+\caption{Leading eigenvectors of covariance for each class}
+\label{fig: Leading_eigenvectors}
+\end{figure}
+
+\subsection{Naive bayes classifier training}
+
+\subsubsection{Convert to binart features}
+
+\begin{lstlisting}[language = Python]
+def binarize_data(pixel_values):
+    return np.where(pixel_values > 0.5, 1.0, 0.0)
+\end{lstlisting}
+
+\subsubsection{Model fitting}
+
+For a Bernoulli Naive Bayes classifier using MAP, we need to calculate $\eta$ first.
+
+\begin{lstlisting}[language = Python]
+def compute_parameters(train_data, train_labels):
+    eta = np.zeros((10, 64))
+    K = eta.shape[0]
+    d = eta.shape[1]
+    for k in range(K):
+        k_index = np.argwhere(train_labels == k)
+        k_digits = train_data[k_index].reshape(-1, d)
+        for j in range(d):
+            eta[k][j] = (np.sum(k_digits[:, j]) + 1.0)\
+                        / (k_digits.shape[0] + 2.0)
+    return eta
+\end{lstlisting}
+
+\subsubsection{Plot $\eta$}
+The parameters $\eta$ is plotted in Figure~\ref{fig: Plot_eta}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{Plot_eta}
+\caption{$\eta$ for each class}
+\label{fig: Plot_eta}
+\end{figure}
+
+\subsubsection{Sample new data}
+
+Given the parameters $\eta$, we can sample new data points for each of the 10 digits. \textit{numpy.random.binomial} method is used here. One new data point is like Figure~\ref{fig: New_data}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{New_data}
+\caption{Sampled data point}
+\label{fig: New_data}
+\end{figure}
+
+\subsubsection{Average conditional log-likelihood}
+
+The average conditional log-likelihood for each class is shown as follows.
+
+\begin{itemize}
+    \item training data avg conditional likelihood: [-2.8909254  -3.92355812 -3.26626627 -3.10729808\\-3.01401521 -3.12587265
+ -2.94008982 -3.17888068 -3.47393427 -3.54254905]
+    \item test data avg conditional likelihood: [-3.10584429 -3.6500495  -3.3475608  -3.29021075\\-3.04145573 -3.20550698
+ -3.06688846 -3.23938846 -3.44419131 -3.507459  ]
+\end{itemize}
+
+\subsubsection{Accuracy}
+
+By selecting the most likely posterior class for each datapoint as prediction, the accuracy is shown as follows.
+
+\begin{itemize}
+    \item training accuracy: 0.774142857143
+    \item test accuracy: 0.76425
+\end{itemize}
+
+\subsection{Model comparison}
+
+For the handwritten digit classification problem, we use models of KNN, conditional Gaussian and naive Bayes. Analyzing from the accuracy, KNN and conditional Gaussian works better, while Naive Bayes performes badly.
+
+\begin{itemize}
+    \item KNN: Due to the relatively distinct classification among digits, decision boundaries are clear in some ways. So it is easy for KNN classifier to find the right group.
+    \item conditional Gaussian: Because the pattern for each class seems fixed, so data points for a certain class gather around the mean. Such structure can be easily caught by Gaussian.
+    \item naive Bayes: Naive Bayes has the assumption that all features should be i.i.d given a data point. However, as we can see from the figures that each feature corresponds to a pixel in the figure. For a digit, pixel connects with each other and form the shape of the digit. So the features here are not i.i.d. Naive Bayes could not work well upon obeying the assumption.
+\end{itemize}
+
+
+\bibliographystyle{plain}
+\bibliography{bibliography.bib}
+\end{document}
