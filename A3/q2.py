@@ -220,8 +220,8 @@ def cross_validation(train_data, train_targets, optimizer):
     print "Training accuracy = ", (train_pred == train_targets).mean()
     test_pred = svm.classify(test_data)
     print "Test accuracy = ", (test_pred == test_targets).mean()
-    plt.imshow(svm.w[: -1].reshape(28, 28), cmap = 'gray')
-    plt.show()
+    return svm
+
 
 if __name__ == '__main__':
     train_data, train_targets, test_data, test_targets = load_data()
@@ -240,7 +240,13 @@ if __name__ == '__main__':
     plt.show()
 
     gdo_0 = GDOptimizer(0.05, 0.0)
-    cross_validation(train_data, train_targets, gdo_0)
-
+    svm_0 = cross_validation(train_data, train_targets, gdo_0)
     gdo_1 = GDOptimizer(0.05, 0.1)
-    cross_validation(train_data, train_targets, gdo_1)
+    svm_1 = cross_validation(train_data, train_targets, gdo_1)
+
+    w = []
+    w.append(svm_0.w[: -1].reshape(28, 28))
+    w.append(svm_1.w[: -1].reshape(28, 28))
+    w = np.concatenate(w, 1)
+    plt.imshow(w, cmap='gray')
+    plt.show()
