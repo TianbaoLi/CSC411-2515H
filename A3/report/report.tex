@@ -168,13 +168,55 @@ Changes for $w_t$ is shown as Figure~\ref{fig: SGD}.
 \label{fig: SGD}
 \end{figure}
 
+\subsection{Training SVM}
+
+Given the formula of SVM, the gradient during training can be shown as
+
+\begin{equation}
+\frac{\partial \ell}{\partial w}=\left\{
+\begin{aligned}
+-C*y^{(i)}\mathbf{x}^{(i)}+w & = & y^{(i)}(w^{\mathrm{T}}\mathbf{x}^{(i)}+b)<1 \\
+0 & = & y^{(i)}(w^{\mathrm{T}}\mathbf{x}^{(i)}+b)\ge1
+\end{aligned}
+\right.
+\end{equation}
+
+\subsection{Apply on 4-vs-9 digits on MNIST}
+
+Here, I trained SVM on MNIST. The trained models for $\beta=0$ is reported as follows:
+
+\begin{itemize}
+    \item $\beta$: 0.0
+    \item optimal hyper-parameter: $C=1$
+    \item training loss: -26.9511525182
+    \item test loss: -27.0820996124
+    \item training accuracy: 0.927437641723
+    \item test accuracy: 0.92636924193
+\end{itemize}
+
+The trained models for $\beta=0.0$ is reported as follows:
+
+\begin{itemize}
+    \item $\beta$: 0.1
+    \item optimal hyper-parameter: $C=1$
+    \item training loss: -21.2169148088
+    \item test loss: -21.2161911264
+    \item training accuracy: 0.940770975057
+    \item test accuracy: 0.937250634748
+\end{itemize}
+
+The $w$ figures for $\beta=0.0$ and $0.1$ are shown in Figure ~\ref{fig: SVM}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{SVM}
+\caption{$w$ figure for $\beta=0.0$ (left) and $0.1$ (right)}
+\label{fig: SVM}
+\end{figure}
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}
-
-
-
 
 
 Given:
