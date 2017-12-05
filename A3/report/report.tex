@@ -19,7 +19,7 @@
 
 \maketitle
 
-\section{Q1: 20 Newsgroups prediction}
+\section{20 Newsgroups prediction}
 
 \subsection{Data summary}
 
@@ -147,6 +147,26 @@ For the best classifier, Neural Networks, the confusion matrix among 20 groups i
 \label{tab: Confusion_matrix}
 \end{table}
 
+\section{Training SVM with SGD}
+
+\subsection{SGD with momentum}
+
+Parameters:
+\begin{itemize}
+    \item function: $f(w)=0.01w^2$
+    \item initianlization: $w_0=10.0$
+    \item learning rate: $\alpha=1.0$
+    \item momentum: $\beta_1=0.0, \beta_2=0.9$
+\end{itemize}
+
+Changes for $w_t$ is shown as Figure~\ref{fig: SGD}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width = 8cm]{SGD}
+\caption{$w_t$ for $\beta=0.0$ and $0.9$}
+\label{fig: SGD}
+\end{figure}
 
 
 \bibliographystyle{plain}
