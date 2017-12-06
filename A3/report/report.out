@@ -8,3 +8,5 @@
 \BOOKMARK [2][-]{subsection.2.1}{SGD with momentum}{section.2}% 8
 \BOOKMARK [2][-]{subsection.2.2}{Training SVM}{section.2}% 9
 \BOOKMARK [2][-]{subsection.2.3}{Apply on 4-vs-9 digits on MNIST}{section.2}% 10
+\BOOKMARK [1][-]{section.3}{Kernels}{}% 11
+\BOOKMARK [2][-]{subsection.3.1}{Positive semidefinite and quadratic form}{section.3}% 12

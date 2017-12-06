@@ -99,7 +99,7 @@ For the best classifier, Neural Networks, the confusion matrix among 20 groups i
 
 \begin{table}[htbp]
 \centering
-\tabcolsep
+\setlength{\tabcolsep}{2pt}
 \begin{tabular}{|cccccccccccccccccccc|}
     \hline
     163 & 6 & 5 & 1 & 1 & 0 & 0 & 4 & 4 & 7 & 5 & 3 & 2 & 11 & 7 & 20 & 7 & 28 & 20 & 38\\
@@ -213,6 +213,42 @@ The $w$ figures for $\beta=0.0$ and $0.1$ are shown in Figure ~\ref{fig: SVM}.
 \caption{$w$ figure for $\beta=0.0$ (left) and $0.1$ (right)}
 \label{fig: SVM}
 \end{figure}
+
+\section{Kernels}
+
+\subsection{Positive semidefinite and quadratic form}
+
+Proof that a symmetric matrix $K\in\mathbbm{R}^{d\times d}$ is positive semidefinite iff for all vectors $\mathbf{x}\in\mathbbm{R}^d$ we have $\mathbf{x}^\mathrm{T}K\mathbf{x}\ge0$.
+
+\begin{proof}
+    Necessity:
+    \begin{align*}
+        \because&\forall \mathbf{x}\in\mathbbm{R}^d, \mathbf{x}^\mathrm{T}K\mathbf{x}\ge0\\
+        \therefore&\forall v \text{ as eigenvector of } K, v^\mathrm{T}Kv=v^\mathrm{T}\lambda v\ge0\\
+        \therefore&\lambda\ge0\text{ ($\lambda$ corresponds to $v$)}\\
+        \therefore&\forall\lambda\ge0\text{ as eigenvalue of } K\\
+        \therefore&K\text{ has no negative eigenvalue}\\
+        \because&K\text{ is symmetric}\\
+        \therefore&K\text{ is positive semidefinite}
+    \end{align*}
+    \quad\quad\quad Sufficiency:
+    \begin{align*}
+        \because&K\in\mathbbm{R}^{d\times d}\text{ is symmetric}\\
+        \therefore&K\text{ has orthogonal eigenvectors for different eigenvalues}\\
+        &K\text{ can be diagonalized}\\
+        \therefore&K\text{ can be represented as }K=Q\Lambda Q^{-1}=Q\Lambda Q^\mathrm{T}\\
+        &Q=[v_1,v_2,\dots,v_d]^\mathrm{T}:\text{ eigenvector matrix}\\
+        &\Lambda:\text{ diagonal matrix}\\
+        \because&v_1,v_2,\dots,v_d\text{ are diagonal}\\
+        \therefore&\forall\mathbf{x}\in R^d=(c_1v_1+c_2c_2+\dots+c_dv_d)\\
+        \therefore&\mathbf{x}^\mathrm{T}A\mathbf{x}=\mathbf{x}^\mathrm{T}Q\Lambda Q^\mathrm{T}\mathbf{x}\\
+        &\quad\quad=(c_1v_1+c_2c_2+\dots+c_dv_d)\bigl(\begin{smallmatrix} v_1\\v_2\\\vdots\\v_d\end{smallmatrix}\bigr)\bigl(\begin{smallmatrix} \lambda_1 &  &  &\\\  & \lambda_2 &  &\\  &  & \dots &\\  &  &  & \lambda_d\\\end{smallmatrix}\bigr)(v_1,v_2,\dots,v_d)(c_1v_1+c_2c_2+\dots+c_dv_d)^\mathrm{T}\\
+        &\quad\quad=(c_1||v_1||^2+c_2||v_2||^2+\dots+(c_d||v_d||^2))\bigl(\begin{smallmatrix} \lambda_1 &  &  &\\\  & \lambda_2 &  &\\  &  & \dots &\\  &  &  & \lambda_d\\\end{smallmatrix}\bigr)(c_1||v_1||^2+c_2||v_2||^2+\dots+(c_d||v_d||^2))^\mathrm{T}\\
+        &\quad\quad=\lambda_1c_1^2||v_1||^4+\lambda_2c_2^2||v_2||^4+\dots+\lambda_dc_d^2||v_d||^4\ge0\\
+        \therefore&\mathbf{x}^\mathrm{T}K\mathbf{x}\ge0
+    \end{align*}
+\end{proof}
+
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
